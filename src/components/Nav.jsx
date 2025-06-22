@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const Nav = () => {
   return (
     <div>
@@ -23,25 +22,44 @@ const Nav = () => {
             >
               SKINSTRIC
             </a>
-            <img
-              alt="left-bracket"
-              loading="lazy"
-              width="4"
-              height="17"
-              className="w-[4px] h-[17px] r-[2px] border-[1px]"
-              src="/images/Rectangle_2710.png"
-            ></img>
+            <svg
+              width="2"
+              height="19"
+              viewBox="0 0 2 19"
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-[#1A1B1C] opacity-70"
+            >
+              <line
+                x1="1"
+                y1="0"
+                x2="1"
+                y2="19"
+                stroke="currentColor"
+                color="#1a1b1c83"
+                strokeWidth="1"
+              />
+            </svg>
+
             <p className="text-[#1a1b1c83] text-opacity-70  font-semibold text-sm ml-1.5 mr-1.5">
               INTRO
             </p>
-            <img
-              alt="right-bracker"
-              loading="lazy"
-              width="4"
-              height="17"
-              className="w-[4px] h-[17px] r-[2px] border-[1px]"
-              src="/images/Rectangle_2711.png"
-            ></img>
+            <svg
+              width="2"
+              height="19"
+              viewBox="0 0 2 19"
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-[#1A1B1C] opacity-70"
+            >
+              <line
+                x1="1"
+                y1="0"
+                x2="1"
+                y2="19"
+                stroke="currentColor"
+                color="#1a1b1c83"
+                strokeWidth="1"
+              />
+            </svg>
           </div>
           <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold  transition-colors  disabled:pointer-events-none text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 mx-4 scale-[0.8] text-[#FCFCFC] text-[10px] bg-[#1A1B1C] leading-[16px]">
             ENTER CODE
