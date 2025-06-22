@@ -61,7 +61,7 @@ const Home = () => {
         className="hidden lg:block fixed left-[-160px] top-1/2 -translate-y-1/2 w-[300px] h-[300px] transition-opacity duration-500 ease-in-out opacity-100"
       >
         <div className="relative w-full h-full">
-          <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 absolute inset-0"></div>
+          <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 fixed inset-0"></div>
           <button
             id="discover-button"
             className="group inline-flex items-center justify-center gap-4 whitespace-nowrap rounded-md text-sm font-normal text-[#1A1B1C] transition-colors focus:outline-none h-9 absolute top-1/2 right-0 -translate-y-1/2 translate-x-0 px-3 py-1"
