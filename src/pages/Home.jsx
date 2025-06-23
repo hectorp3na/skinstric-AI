@@ -8,10 +8,10 @@ const Home = () => {
           <div className="flex flex-col items-center justify-center h-[71dvh] md:fixed md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
 
             {/*  Rotating Boxes */}
-            <div className="absolute inset-0 flex items-center justify-center lg:hidden z-0">
-              <div className="relative w-[320px] h-[320px]">
+            <div className="absolute flex items-center justify-center lg:hidden z-0 -translate-x-1 -translate-y-1/4">
+              <div className="relative w-[320px] h-[320px] -translate-x-1 -translate-y-1">
                 {/* Outer Diamond */}
-                <div className="absolute w-[150px] h-[450px] inset-0 border border-dotted border-[#A0A4AB] rotate-45 -translate-x-1 -translate-y-1" />
+                <div className="absolute w-[150px] h-[450px] inset-0 border border-dotted border-[#A0A4AB] rotate-45 -translate-x-1 -translate-y-1/4" />
 
                 {/* Inner Diamond */}
                 <div className="absolute top-1/2 left-1/2 w-[350px] h-[350px] border border-dotted border-[#A0A4AB] rotate-45 -translate-x-1/2 -translate-y-1/2" />
