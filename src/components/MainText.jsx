@@ -1,6 +1,15 @@
 import React from "react";
 
-const MainText = ({ isHovered }) => {
+const MainText = ({ hoverDirection }) => {
+  let transform;
+  if (hoverDirection === "left") {
+    transform = "translateY(20%) translateX(100px)";
+  } else if (hoverDirection === "right") {
+    transform = "translateY(20%) translateX(-100px)";
+  } else {
+    transform = "translateY(20%)";
+  }
+
   return (
     <>
       {/* Heading */}
@@ -10,9 +19,7 @@ const MainText = ({ isHovered }) => {
       >
         <h1
           style={{
-            transform: isHovered
-              ? "translateY(20%) translateX(100px)"
-              : "translateY(20%",
+            transform,
             transition: "transform 0.3s ease",
           }}
           className="text-[60px] text-[#1A1B1C] lg:text-[100px] font-inter font-normal tracking-tighter leading-none"
