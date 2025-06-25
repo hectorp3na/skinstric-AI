@@ -1,0 +1,44 @@
+import React from "react";
+
+const MainText = ({ isHovered }) => {
+  return (
+    <>
+      {/* Heading */}
+      <div
+        id="main-heading"
+        className="relative z-10 text-center transition-all duration-500"
+      >
+        <h1
+          style={{
+            transform: isHovered
+              ? "translateY(20%) translateX(100px)"
+              : "translateY(20%",
+            transition: "transform 0.3s ease",
+          }}
+          className="text-[60px] text-[#1A1B1C] lg:text-[100px] font-inter font-normal tracking-tighter leading-none"
+        >
+          Sophisticated
+          <br />
+          <span className="block text-[#1A1B1C]">skincare</span>
+        </h1>
+      </div>
+
+      {/* Mobile Paragraph */}
+      <p className="z-10 block lg:hidden w-[30ch] mt-4 text-[16px] font-semibold text-center text-[#1a1b1c83]">
+        Skinstric developed an A.I. that creates a highly-personalized routine
+        tailored to what your skin needs.
+      </p>
+
+      {/* Bottom Paragraph */}
+      <div className="hidden lg:block fixed bottom-[calc(-7vh)] left-[calc(-20vw)] xl:left-[calc(-27vw)] 2xl:left-[calc(-31vw)] font-normal text-sm text-[#1A1B1C] space-y-3 uppercase">
+        <p>
+          Skinstric developed an A.I. that creates a<br />
+          highly-personalized routine tailored to
+          <br />
+          what your skin needs.
+        </p>
+      </div>
+    </>
+  );
+};
+export default MainText;
