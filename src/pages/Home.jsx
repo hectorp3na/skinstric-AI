@@ -9,12 +9,12 @@ const Home = () => {
 
             {/*  Rotating Boxes */}
             <div className="absolute flex items-center justify-center lg:hidden z-0 -translate-x-1 -translate-y-1/4">
-              <div className="relative w-[320px] h-[320px] -translate-x-1 -translate-y-1">
+              <div className="relative w-[420px] h-[420px] -translate-x-1 -translate-y-1">
                 {/* Outer Diamond */}
-                <div className="absolute w-[150px] h-[450px] inset-0 border border-dotted border-[#A0A4AB] rotate-45 -translate-x-1 -translate-y-1/4" />
+                <div style={{ transform: "translateY(5%) translateX(5%)" }} className="absolute w-[450px] h-[450px] inset-0 border border-dotted border-[#A0A4AB] rotate-45 -translate-x-1 -translate-y-[10%]" />
 
                 {/* Inner Diamond */}
-                <div className="absolute top-1/2 left-1/2 w-[350px] h-[350px] border border-dotted border-[#A0A4AB] rotate-45 -translate-x-1/2 -translate-y-1/2" />
+                <div style={{ transform: "translateY(15%) translateX(15%)" }} className="absolute top-1/2 left-1/2 w-[350px] h-[350px] border border-dotted border-[#A0A4AB] rotate-45 -translate-x-1/2 -translate-y-1/2" />
               </div>
             </div>
 
@@ -66,7 +66,7 @@ const Home = () => {
             </div>
 
             {/* CTA Left */}
-            <div className="hidden lg:block fixed left-[calc(-53vw)] xl:left-[calc(-50vw)] top-1/2 -translate-y-1/2 w-[500px] h-[500px]">
+            <div style={{ transform: "translateY(20%)" }} className="hidden lg:block fixed left-[calc(-53vw)] xl:left-[calc(-50vw)] top-1/2 -translate-y-1/2 w-[500px] h-[500px]">
               <div className="relative w-full h-full">
                 <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 fixed inset-0" />
                 <button className="group inline-flex items-center gap-4 text-sm text-[#1A1B1C] h-9 absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/5 xl:translate-x-1/6 px-3 py-1">
@@ -80,7 +80,7 @@ const Home = () => {
             </div>
 
             {/* CTA Right */}
-            <div className="hidden lg:block fixed right-[calc(-53vw)] xl:right-[calc(-50vw)] top-1/2 -translate-y-1/2 w-[500px] h-[500px]">
+            <div style={{ transform: "translateY(20%)" }} className="hidden lg:block fixed right-[calc(-53vw)] xl:right-[calc(-50vw)] top-1/2 -translate-y-1/2 w-[500px] h-[500px]">
               <div className="relative w-full h-full">
                 <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 absolute inset-0" />
                 <a href="/testing">
