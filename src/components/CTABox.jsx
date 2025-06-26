@@ -49,7 +49,7 @@ const CTABox = ({
                   isLeft ? "left-[18px] rotate-180" : "left-[107px]"
                 } scale-[0.9]`}
               >
-                ▶
+             ▶
               </span>
             </button>
           </a>

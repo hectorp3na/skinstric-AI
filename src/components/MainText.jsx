@@ -7,14 +7,18 @@ const MainText = ({
   desktopDescription,
   hoverDirection,
 }) => {
-  let transform;
-  if (hoverDirection === "left") {
-    transform = "translateY(20%) translateX(100px)";
-  } else if (hoverDirection === "right") {
-    transform = "translateY(20%) translateX(-100px)";
-  } else {
-    transform = "translateY(0%)";
-  }
+  const getTransform = (hoverDirection) => {
+    switch (hoverDirection) {
+      case "left":
+        return "translateY(20%) translateX(100px)";
+      case "right":
+        return "translateY(20%) translateX(-100px)";
+      default:
+        return "translateY(0%)";
+    }
+  };
+  
+  const transform = getTransform(hoverDirection);
 
   return (
     <>
