@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const CTABox = ({
   side = "left",
@@ -7,26 +7,23 @@ const CTABox = ({
   hoverDirection,
   setHoverDirection,
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const isLeft = side === "left";
-  const isRight = side === "right";
-  const hovered = isHovered === side;
+  const isHovered = hoverDirection === side;
+  const isOppositeHovered = hoverDirection && hoverDirection !== side;
+
+  const transform = isOppositeHovered
+    ? `translateY(20%) translateX(${isLeft ? "-100px" : "100px"})`
+    : "translateY(20%)";
+
+  const opacity = isOppositeHovered ? 0 : 1;
 
   return (
     <div
-      onMouseEnter={() => {
-        setIsHovered(side); 
-        setHoverDirection(side); 
-      }}
-      onMouseLeave={() => {
-        setIsHovered(false); 
-        setHoverDirection(null);
-      }}
       style={{
-        transform: hovered
-          ? `translateY(20%) translateX(${isLeft ? "-100px" : "100px"})`
-          : "translateY(20%)",
-        transition: "transform 0.3s ease",
+        transform,
+        opacity,
+        pointerEvents: isOppositeHovered ? "none" : "auto",
+        transition: "transform 0.3s ease, opacity 0.3s ease",
       }}
       className={`hidden lg:block fixed top-1/2 -translate-y-1/2 w-[500px] h-[500px] ${
         isLeft
@@ -39,18 +36,20 @@ const CTABox = ({
         {link && (
           <a href={link}>
             <button
+              onMouseEnter={() => setHoverDirection(side)}
+              onMouseLeave={() => setHoverDirection(null)}
               className={`inline-flex items-center gap-4 text-sm text-[#1A1B1C] h-9 absolute top-1/2 ${
                 isLeft
                   ? "right-0 -translate-x-1/5 xl:translate-x-1/6"
                   : "left-0 -translate-x-1/5 xl:-translate-x-1/6"
-              } -translate-y-1/2 px-3 py-1 cursor-pointer ease duration-300 hover:text-black`}
+              } -translate-y-1/2 px-3 py-1 cursor-pointer ease duration-300 hover:text-black group`}
             >
               {isLeft && (
-                <div className="w-[30px] h-[30px] border border-black rotate-45" />
+                <div className="w-[30px] h-[30px] border border-black rotate-45 transition-transform duration-300 group-hover:scale-125" />
               )}
               <span>{label}</span>
-              {isRight && (
-                <div className="w-[30px] h-[30px] border border-black rotate-45" />
+              {!isLeft && (
+                <div className="w-[30px] h-[30px] border border-black rotate-45 transition-transform duration-300 group-hover:scale-125" />
               )}
               <span
                 className={`absolute top-[9px] ${

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CTABox from "./CTABox";
 
 const CTAs = ({ hoverDirection, setHoverDirection }) => {
