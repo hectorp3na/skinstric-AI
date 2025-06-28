@@ -413,7 +413,7 @@
   }
 
   .relative {
-      position: 
+      position: relative;
   }
 
   .sticky {
@@ -1941,7 +1941,7 @@
           line-height: var(--tw-leading,var(--text-6xl--line-height))
       }
   }
-
+  
 
   @media (min-width: 48rem) {
       .md\:absolute {
