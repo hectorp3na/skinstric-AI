@@ -90,23 +90,21 @@ const TestingText = () => {
             </p>
           </div>
 
-          <div className="absolute bottom-[38.5px] md:bottom-8 w-full flex justify-end md:px-9 px-13">
-            <a className="inset-0 pt-btn" aria-label="Proceed" href="/next">
+          <div className="fixed bottom-[38.5px] md:bottom-8 right-0 md:right-9 px-6">
+            <a className="pt-btn" aria-label="Proceed" href="/next">
               <div>
-                <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
-                  <span className="rotate-[-45deg] text-xs font-semibold sm:hidden">
+                <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
+                  <span className="rotate-[-45deg] text-xs font-semibold">
                     PROCEED
                   </span>
                 </div>
-
-                <div className="group hidden sm:flex flex-row justify-center items-center">
-                  <div className="w-12 h-12 hidden sm:flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300" />
-                  <span className="absolute left-[15px] bottom-[13px] scale-[0.9] hidden sm:block group-hover:scale-[0.92] ease duration-300">
+                <div className="group hidden sm:flex flex-row items-center relative">
+                  <span className="text-sm font-semibold ml-4">PROCEED</span>
+                  <div className="w-12 h-12 border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300" />
+                  <span className="absolute left-[15px] bottom-[13px] scale-[0.9] group-hover:scale-[0.92] ease duration-300">
                     ▶
                   </span>
-                  <span className="text-sm font-semibold hidden sm:block ml-6">
-                    NEXT
-                  </span>
+
                 </div>
               </div>
             </a>
