@@ -11,8 +11,7 @@ const TestingText = ({
   const [error, setError] = useState("");
   const [step, setStep] = useState(1);
 
-  
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (step === 1) {
@@ -32,10 +31,38 @@ const TestingText = ({
       setError("");
       setIsLoading(true);
 
-      setTimeout(() => {
-        setIsLoading(false);
+      const payload = {
+        name,
+        location: city,
+      };
+    
+      try {
+        const res = await fetch(
+          "https://us-central1-api-skinstric-ai.cloudfunctions.net/skinstricPhaseOne",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+
+        const data = await res.json(); 
+
+        if (!res.ok) {
+          throw new Error("Submission failed");
+        }
+
         setIsSubmitted(true);
-      }, 2000);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to submit data.");
+      } finally {
+        setIsLoading(false);
+      }
+
+      localStorage.setItem("userInfo", JSON.stringify(payload));
     }
   };
   return (
