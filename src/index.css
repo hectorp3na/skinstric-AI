@@ -662,6 +662,9 @@
   .mr-1\.5 {
       margin-right: calc(var(--spacing)*1.5)
   }
+  .mr-1 {
+      margin-right: calc(var(--spacing)*1)
+  }
 
   .mr-2 {
       margin-right: calc(var(--spacing)*2)
@@ -669,6 +672,13 @@
 
   .mr-5 {
       margin-right: calc(var(--spacing)*5)
+  }
+
+  .mr-8 {
+      margin-right: calc(var(--spacing)*8)
+  }
+  .mr-12 {
+      margin-right: calc(var(--spacing)*12)
   }
 
   .mb-0 {
@@ -717,6 +727,9 @@
 
   .ml-6 {
       margin-left: calc(var(--spacing)*6)
+  }
+  .ml-12 {
+      margin-left: calc(var(--spacing)*12)
   }
 
   .line-clamp-4 {

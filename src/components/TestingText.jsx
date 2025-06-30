@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 
-const TestingText = () => {
+const TestingText = ({
+  isLoading,
+  setIsLoading,
+  isSubmitted,
+  setIsSubmitted,
+}) => {
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [error, setError] = useState("");
   const [step, setStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -16,7 +20,7 @@ const TestingText = () => {
         setError("Please enter your name");
         return;
       }
-      console.log("Submitted name:", name);
+
       setError("");
       setStep(2);
     } else if (step === 2) {
@@ -24,7 +28,7 @@ const TestingText = () => {
         setError("Please enter your city");
         return;
       }
-      console.log("Submitted city:", city);
+
       setError("");
       setIsLoading(true);
 
@@ -82,34 +86,10 @@ const TestingText = () => {
           </button>
         </form>
       ) : (
-        <>
-          <div className="flex flex-col items-center mt-6">
-            <p className="text-3xl font-semibold text-[#1A1B1C]">Thank you!</p>
-            <p className="mt-2 text-lg text-gray-600">
-              Proceed to the next step
-            </p>
-          </div>
-
-          <div className="fixed bottom-[38.5px] md:bottom-8 right-0 md:right-9 px-6">
-            <a className="pt-btn" aria-label="Proceed" href="/next">
-              <div>
-                <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
-                  <span className="rotate-[-45deg] text-xs font-semibold">
-                    PROCEED
-                  </span>
-                </div>
-                <div className="group hidden sm:flex flex-row items-center relative">
-                  <span className="text-sm font-semibold ml-4">PROCEED</span>
-                  <div className="w-12 h-12 border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300" />
-                  <span className="absolute left-[15px] bottom-[13px] scale-[0.9] group-hover:scale-[0.92] ease duration-300">
-                    ▶
-                  </span>
-
-                </div>
-              </div>
-            </a>
-          </div>
-        </>
+        <div className="flex flex-col items-center mt-6">
+          <p className="text-3xl font-semibold text-[#1A1B1C]">Thank you!</p>
+          <p className="mt-2 text-lg text-gray-600">Proceed to the next step</p>
+        </div>
       )}
     </div>
   );
