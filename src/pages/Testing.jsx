@@ -51,7 +51,7 @@ const Testing = () => {
                 : "translate-y-10 opacity-0 pointer-events-none"
             }`}
           >
-            <a className="pt-btn" aria-label="Proceed" href="/next">
+            <a className="pt-btn" aria-label="Proceed" href="/result">
               <div>
                 <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
                   <span className="rotate-[-45deg] text-xs font-semibold">
