@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-const UploadIcon = ({ onFileSelect }) => {
+const UploadIcon = ({ onFileSelect}) => {
   const fileInputRef = useRef();
 
   const handleClick = () => {
