@@ -1,4 +1,5 @@
 import React from "react";
+import BackButton from "../components/BackButton";
 
 const Select = () => {
   return (
@@ -11,7 +12,7 @@ const Select = () => {
         textAlign: "left",
         paddingLeft: "2.25rem",
         paddingRight: "2.25rem",
-        marginTop: "-2rem",
+        marginTop: "-3rem",
         minHeight: "764px",
         overflow: "visible",
         display: "flex",
@@ -20,17 +21,12 @@ const Select = () => {
       }}
     >
       <div
-        style={{
-          position: "relative",
-          marginTop: "-1rem",
-          left: "2.25rem",
-          zIndex: 20,
-        }}
+       className="absolute top-2 left-8 text-left mt-5"
       >
-        <p className="font-semibold text-base leading-6 uppercase tracking-[-0.02em] font-roobert">
+        <h1 className="text-sm font-semibold leading-[24px] tracking-tight">
           A.I. ANALYSIS
-        </p>
-        <p className="font-normal text-sm leading-6 uppercase font-roobert">
+        </h1>
+        <p className="text-sm mt-1 text-muted-foreground uppercase leading-[24px]">
           A.I. has estimated the following. <br /> Fix estimated information if
           needed.
         </p>
@@ -159,7 +155,31 @@ const Select = () => {
           fill="#1A1B1C"
         />
       </svg>
+      <BackButton />
+      <div className="pt-4 md:pt-12 pb-8 bg-white sticky md:static bottom-40 mb-0 md:mb-0">
+        <div className="flex justify-between max-w-full mx-auto px-13 md:px-9">
+      <a className="pt-btn" aria-label="Proceed" href="/summary">
+              <div>
+                <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
+                  <span className="rotate-[-45deg] text-xs font-semibold">
+                    SUM
+                  </span>
+                </div>
+
+                <div className="group hidden sm:flex flex-row items-center space-x-6 relative">
+                  <span className="text-sm font-semibold">GET SUMMARY</span>
+                  <div className="relative w-12 h-12 border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300">
+                    <div className="absolute inset-0 flex items-center justify-center rotate-[-45deg]">
+                      <span className="scale-[0.9]">▶</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+            </div>
     </div>
+   
   );
 };
 
