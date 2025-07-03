@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-const UploadIcon = () => {
+const UploadIcon = ({ onFileSelect }) => {
   const fileInputRef = useRef();
 
   const handleClick = () => {
@@ -10,6 +10,8 @@ const UploadIcon = () => {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    onFileSelect();
 
     const reader = new FileReader();
 

@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import UploadIcon from "./UploadIcon";
+import PreppingAnalysis from "./PreppingAnalysis";
 
 const ResultsBoxes = () => {
-  return (
+    const [isFileSelected, setIsFileSelected] = useState(false);
+
+  return isFileSelected ? (
+    <PreppingAnalysis />
+  ) : (
     <div className="flex-[0.4] md:flex-1 flex flex-col md:flex-row items-center xl:justify-center relative mb-0 md:mb-30 space-y-[-20px] md:space-y-0">
       <div className="relative md:absolute md:left-[55%] lg:left-[50%] xl:left-[40%] md:-translate-y-[0%] -translate-y-[1%] md:-translate-x-full flex flex-col items-center justify-center">
         <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px]"></div>
@@ -182,7 +187,7 @@ const ResultsBoxes = () => {
         </svg>
 
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <UploadIcon />
+          <UploadIcon onFileSelect={() => setIsFileSelected(true)} /> 
           <div className="absolute top-[75%] md:top-[70%] md:left-[17px] translate-y-[-10px]">
             <p className="text-[12px] md:text-[14px] font-normal mt-2 leading-[24px] text-right">
               ALLOW A.I.
@@ -198,8 +203,8 @@ const ResultsBoxes = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M1.66917 56.874C1.66917 56.0456 2.34074 55.374 3.16917 55.374C3.9976 55.374 4.66917 56.0456 4.66917 56.874C4.66917 57.7025 3.9976 58.374 3.16917 58.374C2.34074 58.374 1.66917 57.7025 1.66917 56.874ZM0.669174 56.874C0.669174 55.4933 1.78846 54.374 3.16917 54.374C3.68565 54.374 4.16555 54.5306 4.56396 54.799L66.3374 -1.52588e-05L67.001 0.748062L5.26634 55.5127C5.52114 55.9044 5.66917 56.3719 5.66917 56.874C5.66917 58.2547 4.54988 59.374 3.16917 59.374C1.78846 59.374 0.669174 58.2547 0.669174 56.874Z"
                 fill="#1A1B1C"
               />

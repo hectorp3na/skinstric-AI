@@ -48,7 +48,7 @@ const TestingText = ({
           }
         );
 
-        const data = await res.json(); 
+        await res.json(); 
 
         if (!res.ok) {
           throw new Error("Submission failed");

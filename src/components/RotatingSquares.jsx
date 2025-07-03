@@ -15,10 +15,10 @@ const RotatingSquares = () => {
           opacity="0.3"
           d="M382 1L763 382L382 763L1 382L382 1Z"
           stroke="#A0A4AB"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-dasharray="0.1 8"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="0.1 8"
         />
       </svg>
       <svg
@@ -33,10 +33,10 @@ const RotatingSquares = () => {
           opacity="0.6"
           d="M342 1L683 342L342 683L1 342L342 1Z"
           stroke="#A0A4AB"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-dasharray="0.1 8"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="0.1 8"
         />
       </svg>
       <svg
@@ -50,10 +50,10 @@ const RotatingSquares = () => {
         <path
           d="M302 1L603 302L302 603L1 302L302 1Z"
           stroke="#A0A4AB"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-dasharray="0.1 8"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="0.1 8"
         />
       </svg>
       </>
