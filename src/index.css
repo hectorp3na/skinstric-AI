@@ -1019,6 +1019,10 @@
       width: 100%
   }
 
+  .w-95 {
+    width: 95%
+  }
+
   .w-screen {
       width: 100vw
   }
@@ -1471,6 +1475,33 @@
 
 .pt-btn {
   padding-top: calc(var(--spacing)*10)
+}
+.pt-btn9 {
+  padding-top: calc(var(--spacing)*90)
+}
+
+.diamondRect {
+  fill: #f3f4f6; 
+  transition: fill 0.3s ease; 
+  cursor: pointer;
+}
+
+.diamondRect:hover {
+  fill: #d1d5db;  
+}
+
+.pulse {
+  animation: pulseScale 1s ease infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes pulseScale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
   .pt-2 {

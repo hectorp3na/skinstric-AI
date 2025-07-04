@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const spinKeyframes = `
 @keyframes spin-slow {
@@ -13,9 +14,30 @@ const spinKeyframes = `
   0% { transform: translate(-50%, -50%) rotate(0deg); }
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+}
 `;
 
 const PreppingAnalysis = () => {
+  const [isAnalyzing, setIsAnalyzing] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const result = "success";
+      setIsAnalyzing(false);
+
+      if (result === "success") {
+        alert("Image analyzed successfully!");
+        navigate("/select");
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
   const containerStyle = {
     position: "fixed",
     top: 0,
@@ -30,7 +52,7 @@ const PreppingAnalysis = () => {
 
   const relativeBoxStyle = {
     position: "relative",
-    width: "586px", 
+    width: "586px",
     height: "586px",
     maxWidth: "90vw",
     maxHeight: "80vh",
@@ -151,7 +173,33 @@ const PreppingAnalysis = () => {
             />
           </svg>
 
-          <div style={textStyle}>PREPARING YOUR ANALYSIS...</div>
+          {isAnalyzing && (
+            <div style={textStyle}>
+              PREPARING YOUR ANALYSIS...
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "8px",
+                }}
+              >
+                {[0, 1, 2].map((dot, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      width: "8px",
+                      height: "8px",
+                      margin: "0 4px",
+                      borderRadius: "50%",
+                      backgroundColor: "#1A1B1C",
+                      animation: `bounce 1.4s infinite`,
+                      animationDelay: `${i * 0.2}s`,
+                    }}
+                  ></div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>
