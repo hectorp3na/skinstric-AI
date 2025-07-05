@@ -448,6 +448,9 @@
   .top-16 {
       top: calc(var(--spacing)*16)
   }
+  .top-20 {
+      top: calc(var(--spacing)*20)
+  }
 
   .top-40 {
       top: calc(var(--spacing)*40)

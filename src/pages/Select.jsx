@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Select = () => {
   const navigate = useNavigate();
+  
 
   return (
     <div
@@ -32,7 +33,7 @@ const Select = () => {
         </p>
       </div>
 
-
+      <div className="relative w-full h-full flex items-center justify-center group/outer-hover">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="764"
@@ -159,6 +160,7 @@ const Select = () => {
           fill="#1A1B1C"
         />
       </svg>
+      </div>
 
       <div className="absolute bottom-[38.5px] md:bottom-8 w-95 flex justify-between md:px-9 px-13 z-50">
         <a className="pt-btn9" aria-label="Back" href="/result">
