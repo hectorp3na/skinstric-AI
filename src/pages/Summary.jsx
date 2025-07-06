@@ -1,6 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Summary = () => {
+  const [topAge, setTopAge] = useState(null);
+  const [topGender, setTopGender] = useState(null);
+  const [topRace, setTopRace] = useState(null);
+  const [topRaceScore, setTopRaceScore] = useState(0);
+  const [raceOptions, setRaceOptions] = useState([]);
+
+  const fetchDemographics = async (base64String) => {
+    try {
+      const response = await axios.post(
+        "https://us-central1-api-skinstric-ai.cloudfunctions.net/skinstricPhaseTwo",
+        { image: base64String },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = response.data;
+
+      const topEntry = (obj) => {
+        if (!obj || Object.keys(obj).length === 0) return [null, 0];
+        return Object.entries(obj).reduce((a, b) => (a[1] > b[1] ? a : b));
+      };
+
+      const [age] = topEntry(data.age);
+      const [gender] = topEntry(data.gender);
+      const [race, raceScore] = topEntry(data.race);
+
+      setTopAge(age);
+      setTopGender(gender);
+      setTopRace(race);
+      setTopRaceScore(raceScore);
+
+      const sortedRaces = Object.entries(data.race)
+        .sort((a, b) => b[1] - a[1])
+        .map(([label, value]) => ({
+          label,
+          percent: (value * 100).toFixed(0) + "%",
+          active: label === race,
+        }));
+
+      setRaceOptions(sortedRaces);
+    } catch (error) {
+      console.error("API error:", error);
+    }
+  };
+
+  useEffect(() => {
+    const base64String = localStorage.getItem("imageBase64");
+    if (base64String) {
+      fetchDemographics(base64String);
+    }
+  }, []);
+
   return (
     <div className="__className_5f0add antialiased text-[#1A1B1C] min-h-screen overflow-auto">
       <div className="min-h-[90vh] max-w-full flex mx-5 flex-col items-center justify-center bg-white text-center px-4 md:px-0">
@@ -18,26 +73,26 @@ const Summary = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-[1.5fr_8.5fr_3.15fr] gap-4 mt-10 mb-20 md:mb-0">
-            {/* Column 1 */}
+            {/* FIRST COLUMN */}
             <div className="space-y-3 md:flex md:flex-col">
               <div className="p-3 cursor-pointer bg-[#1A1B1C] text-white hover:bg-black flex flex-col justify-between border-t">
-                <p className="text-base font-semibold">South asian</p>
+                <p className="text-base font-semibold">{topRace || "N/A"}</p>
                 <h4 className="text-base font-semibold mb-1">RACE</h4>
               </div>
               <div className="p-3 cursor-pointer bg-[#F3F3F4] hover:bg-[#E1E1E2] flex flex-col justify-between border-t">
-                <p className="text-base font-semibold">30-39</p>
+                <p className="text-base font-semibold">{topAge || "N/A"}</p>
                 <h4 className="text-base font-semibold mb-1">AGE</h4>
               </div>
               <div className="p-3 cursor-pointer bg-[#F3F3F4] hover:bg-[#E1E1E2] flex flex-col justify-between border-t">
-                <p className="text-base font-semibold">MALE</p>
+                <p className="text-base font-semibold">{topGender || "N/A"}</p>
                 <h4 className="text-base font-semibold mb-1">SEX</h4>
               </div>
             </div>
 
-            {/* Column 2 */}
+            {/* SECOND COLUMN */}
             <div className="relative bg-gray-100 p-4 flex flex-col items-center justify-center md:h-[57vh] md:border-t">
               <p className="hidden md:block md:absolute text-[40px] mb-2 left-5 top-2">
-                South asian
+                {topRace || "RACE"}
               </p>
               <div className="relative md:absolute w-full max-w-[384px] aspect-square mb-4 md:right-5 md:bottom-2">
                 <div className="w-full h-full max-h-[384px] relative scale-[1] origin-center">
@@ -62,18 +117,18 @@ const Summary = () => {
 
                   <div className="absolute inset-0 flex items-center justify-center">
                     <p className="text-3xl md:text-[40px] font-normal">
-                      96
+                      {Math.round(topRaceScore * 100)}
                       <span className="absolute text-xl md:text-3xl">%</span>
                     </p>
                   </div>
                 </div>
               </div>
               <p className="md:absolute text-xs text-[#A0A4AB] md:text-sm lg:text-base font-normal mb-1 leading-[24px] md:bottom-[-15%] md:left-[22%] lg:left-[30%] xl:left-[40%] 2xl:left-[45%]">
-                If A.I. estiamte is wrong, select the correct one.
+                If A.I. estimate is wrong, select the correct one.
               </p>
             </div>
 
-            {/* Column 3 */}
+            {/* THIRD COLUMN */}
             <div className="bg-gray-100 pt-4 pb-4 md:border-t">
               <div className="space-y-0">
                 <div className="flex justify-between px-4">
@@ -82,21 +137,11 @@ const Summary = () => {
                     A.I. CONFIDENCE
                   </h4>
                 </div>
-                {[
-                  { label: "South asian", percent: "96%", active: true },
-                  { label: "Southeast asian", percent: "6%" },
-                  { label: "Latino hispanic", percent: "3%" },
-                  { label: "White", percent: "2%" },
-                  { label: "East asian", percent: "0%" },
-                  { label: "Black", percent: "0%" },
-                  { label: "Middle eastern", percent: "0%" },
-                ].map((item, idx) => (
+                {raceOptions.map(({ label, percent, active }, idx) => (
                   <div
                     key={idx}
                     className={`flex items-center justify-between h-[48px] px-4 cursor-pointer hover:bg-[#E1E1E2] ${
-                      item.active
-                        ? "bg-[#1A1B1C] text-white hover:bg-black"
-                        : ""
+                      active ? "bg-[#1A1B1C] text-white hover:bg-black" : ""
                     }`}
                   >
                     <div className="flex items-center gap-1">
@@ -113,11 +158,11 @@ const Summary = () => {
                         />
                       </svg>
                       <span className="font-normal text-base leading-6 tracking-tight">
-                        {item.label}
+                        {label}
                       </span>
                     </div>
                     <span className="font-normal text-base leading-6 tracking-tight">
-                      {item.percent}
+                      {percent}
                     </span>
                   </div>
                 ))}
