@@ -108,6 +108,7 @@ const Select = () => {
         }}
       >
         <rect
+        href="/summary"
           className="diamondRect"
           x="222.002"
           y="0.00268555"

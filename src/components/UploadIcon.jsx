@@ -1,7 +1,11 @@
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const UploadIcon = ({ onFileSelect}) => {
   const fileInputRef = useRef();
+  const navigate = useNavigate();
+
 
   const handleClick = () => {
     fileInputRef.current.click();
@@ -31,10 +35,19 @@ const UploadIcon = ({ onFileSelect}) => {
         );
 
         const result = await response.json();
-        console.log("API response:", result);
-      } catch (error) {
-        console.error("Upload failed", error);
-      }
+        if (result.success && result.data) {
+            navigate("/summary", {
+              state: {
+                imageBase64: base64,
+                apiResult: result.data,
+              },
+            });
+          } else {
+            console.error("API returned success: false", result);
+          }
+        } catch (error) {
+            console.error("Upload failed", error);
+        }
     };
 
     reader.readAsDataURL(file);

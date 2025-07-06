@@ -1,60 +1,56 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Summary = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const base64String = location.state?.imageBase64;
+  const apiResult = location.state?.apiResult;
   const [topAge, setTopAge] = useState(null);
   const [topGender, setTopGender] = useState(null);
   const [topRace, setTopRace] = useState(null);
   const [topRaceScore, setTopRaceScore] = useState(0);
   const [raceOptions, setRaceOptions] = useState([]);
-
-  const fetchDemographics = async (base64String) => {
-    try {
-      const response = await axios.post(
-        "https://us-central1-api-skinstric-ai.cloudfunctions.net/skinstricPhaseTwo",
-        { image: base64String },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = response.data;
-
-      const topEntry = (obj) => {
-        if (!obj || Object.keys(obj).length === 0) return [null, 0];
-        return Object.entries(obj).reduce((a, b) => (a[1] > b[1] ? a : b));
-      };
-
-      const [age] = topEntry(data.age);
-      const [gender] = topEntry(data.gender);
-      const [race, raceScore] = topEntry(data.race);
-
-      setTopAge(age);
-      setTopGender(gender);
-      setTopRace(race);
-      setTopRaceScore(raceScore);
-
-      const sortedRaces = Object.entries(data.race)
-        .sort((a, b) => b[1] - a[1])
-        .map(([label, value]) => ({
-          label,
-          percent: (value * 100).toFixed(0) + "%",
-          active: label === race,
-        }));
-
-      setRaceOptions(sortedRaces);
-    } catch (error) {
-      console.error("API error:", error);
-    }
-  };
+  const radius = 180;
+  const strokeWidth = 6;
+  const normalizedRadius = radius - strokeWidth / 2;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  const strokeDashoffset = circumference - topRaceScore * circumference;
 
   useEffect(() => {
-    const base64String = localStorage.getItem("imageBase64");
-    if (base64String) {
-      fetchDemographics(base64String);
+    if (!base64String || !apiResult) {
+      navigate("/summary");
+      return;
     }
+    fetchDemographics(apiResult);
   }, []);
+
+  const fetchDemographics = (data) => {
+    const topEntry = (obj) => {
+      if (!obj || Object.keys(obj).length === 0) return [null, 0];
+      return Object.entries(obj).reduce((a, b) => (a[1] > b[1] ? a : b));
+    };
+
+    const [age] = topEntry(data.age);
+    const [gender] = topEntry(data.gender);
+    const [race, raceScore] = topEntry(data.race);
+
+    setTopAge(age);
+    setTopGender(gender);
+    setTopRace(race);
+    setTopRaceScore(raceScore);
+
+    const sortedRaces = Object.entries(data.race)
+      .sort((a, b) => b[1] - a[1])
+      .map(([label, value]) => ({
+        label,
+        percent: (value * 100).toFixed(0) + "%",
+        active: label === race,
+      }));
+
+    setRaceOptions(sortedRaces);
+  };
+
 
   return (
     <div className="__className_5f0add antialiased text-[#1A1B1C] min-h-screen overflow-auto">
@@ -97,21 +93,31 @@ const Summary = () => {
               <div className="relative md:absolute w-full max-w-[384px] aspect-square mb-4 md:right-5 md:bottom-2">
                 <div className="w-full h-full max-h-[384px] relative scale-[1] origin-center">
                   <svg
-                    width="384"
-                    height="384"
-                    viewBox="0 0 384 384"
+                    height={radius * 2}
+                    width={radius * 2}
+                    viewBox={`0 0 ${radius * 2} ${radius * 2}`}
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path
-                      d="M192 1.5C217.017 1.5 241.789 6.42743 264.901 16.001C288.014 25.5745 309.014 39.6066 326.704 57.2962C344.393 74.9857 358.426 95.9863 367.999 119.099C377.573 142.211 382.5 166.983 382.5 192C382.5 217.017 377.573 241.789 367.999 264.901C358.426 288.014 344.393 309.014 326.704 326.704C309.014 344.393 288.014 358.426 264.901 367.999C241.789 377.573 217.017 382.5 192 382.5C166.983 382.5 142.211 377.573 119.099 367.999C95.9862 358.425 74.9857 344.393 57.2961 326.704C39.6065 309.014 25.5744 288.014 16.0009 264.901C6.4274 241.789 1.49999 217.017 1.5 192C1.50001 166.983 6.42745 142.211 16.001 119.099C25.5745 95.9862 39.6067 74.9856 57.2962 57.2961C74.9858 39.6065 95.9864 25.5744 119.099 16.0009C142.211 6.4274 166.983 1.49998 192 1.5Z"
+                    <circle
                       stroke="#C1C2C3"
-                      strokeWidth="3"
+                      fill="transparent"
+                      strokeWidth={strokeWidth}
+                      r={normalizedRadius}
+                      cx={radius}
+                      cy={radius}
                     />
-                    <path
-                      d="M192 1.5C241.488 1.5 289.033 20.7579 324.571 55.197C360.11 89.636 380.852 136.553 382.406 186.016C383.96 235.479 366.205 283.606 332.9 320.209C299.594 356.811 253.352 379.017 203.962 382.124C154.572 385.231 105.911 368.997 68.2801 336.857C30.6494 304.718 7.00261 259.196 2.34544 209.928C-2.31174 160.66 12.3863 111.513 43.3281 72.8912C74.2699 34.2696 119.027 9.20455 168.124 3.00213"
+                    <circle
                       stroke="#1A1B1C"
-                      strokeWidth="3"
+                      fill="transparent"
+                      strokeWidth={strokeWidth}
+                      strokeDasharray={circumference}
+                      strokeDashoffset={strokeDashoffset}
+                      strokeLinecap="round"
+                      r={normalizedRadius}
+                      cx={radius}
+                      cy={radius}
+                      style={{ transition: "stroke-dashoffset 0.5s ease" }}
                     />
                   </svg>
 
@@ -172,7 +178,7 @@ const Summary = () => {
         </div>
 
         <div className="absolute bottom-[38.5px] md:bottom-8 w-full max-w-[1440px] flex justify-between md:px-9 px-4 z-50">
-          <a className="pt-btn9" aria-label="Back" href="/result">
+          <a className="pt-btn9" aria-label="Back" href="/select">
             <div>
               <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
                 <span className="rotate-[-45deg] text-xs font-semibold">
