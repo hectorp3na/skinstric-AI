@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Summary = () => {
@@ -6,58 +6,102 @@ const Summary = () => {
   const navigate = useNavigate();
   const base64String = location.state?.imageBase64;
   const apiResult = location.state?.apiResult;
+
   const [topAge, setTopAge] = useState(null);
   const [topGender, setTopGender] = useState(null);
   const [topRace, setTopRace] = useState(null);
   const [topRaceScore, setTopRaceScore] = useState(0);
-  const [raceOptions, setRaceOptions] = useState([]);
-  const radius = 180;
-  const strokeWidth = 6;
+  
+
+  const [selectedCategory, setSelectedCategory] = useState("race");
+  const [categoryOptions, setCategoryOptions] = useState({});
+
+  const radius = 192;
+  const strokeWidth = 8;
   const normalizedRadius = radius - strokeWidth / 2;
-  const circumference = normalizedRadius * 2 * Math.PI;
-  const strokeDashoffset = circumference - topRaceScore * circumference;
+  const circumference = 2 * Math.PI * normalizedRadius;
+  const strokeDashoffset =
+    topRaceScore !== null
+      ? circumference - topRaceScore * circumference
+      : circumference;
+
+  const topEntry = useCallback((obj) => {
+    if (!obj || Object.keys(obj).length === 0) return [null, 0];
+    return Object.entries(obj).reduce((a, b) => (a[1] > b[1] ? a : b));
+  }, []);
+
+  const fetchDemographics = useCallback(
+    (data) => {
+      const capitalize = (str) => {
+        if (!str || typeof str !== "string") return str;
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+      };
+
+      const [age] = topEntry(data.age);
+      const [gender] = topEntry(data.gender);
+      const [race, raceScore] = topEntry(data.race);
+
+      setTopAge(age);
+      setTopGender(capitalize(gender));
+      setTopRace(capitalize(race));
+      setTopRaceScore(raceScore);
+
+      const formatOptions = (category, top) =>
+        Object.entries(data[category])
+          .sort((a, b) => b[1] - a[1])
+          .map(([label, value]) => ({
+            label: capitalize(label),
+            percent: (value * 100).toFixed(0) + "%",
+            active: capitalize(label) === capitalize(top),
+          }));
+
+      setCategoryOptions({
+        race: formatOptions("race", race),
+        age: formatOptions("age", age),
+        gender: formatOptions("gender", gender),
+      });
+    },
+    [topEntry]
+  );
 
   useEffect(() => {
     if (!base64String || !apiResult) {
-      navigate("/summary");
+      navigate("/select");
       return;
     }
     fetchDemographics(apiResult);
-  }, []);
+  }, [base64String, apiResult, navigate, fetchDemographics]);
 
-  const fetchDemographics = (data) => {
-    const topEntry = (obj) => {
-      if (!obj || Object.keys(obj).length === 0) return [null, 0];
-      return Object.entries(obj).reduce((a, b) => (a[1] > b[1] ? a : b));
-    };
+  const handleOptionClick = (label) => {
+    if (selectedCategory === "race") {
+      setTopRace(label);
+      setTopRaceScore(
+        parseInt(
+          categoryOptions["race"].find((o) => o.label === label)?.percent
+        ) / 100
+      );
+    } else if (selectedCategory === "age") {
+      setTopAge(label);
+    } else if (selectedCategory === "gender") {
+      setTopGender(label);
+    }
 
-    const [age] = topEntry(data.age);
-    const [gender] = topEntry(data.gender);
-    const [race, raceScore] = topEntry(data.race);
-
-    setTopAge(age);
-    setTopGender(gender);
-    setTopRace(race);
-    setTopRaceScore(raceScore);
-
-    const sortedRaces = Object.entries(data.race)
-      .sort((a, b) => b[1] - a[1])
-      .map(([label, value]) => ({
-        label,
-        percent: (value * 100).toFixed(0) + "%",
-        active: label === race,
-      }));
-
-    setRaceOptions(sortedRaces);
+    setCategoryOptions((prev) => ({
+      ...prev,
+      [selectedCategory]: prev[selectedCategory].map((item) => ({
+        ...item,
+        active: item.label === label,
+      })),
+    }));
   };
 
-
   return (
-    <div className="__className_5f0add antialiased text-[#1A1B1C] min-h-screen overflow-auto">
-      <div className="min-h-[90vh] max-w-full flex mx-5 flex-col items-center justify-center bg-white text-center px-4 md:px-0">
-        <div className="relative w-full max-w-[1440px] mx-auto">
+    <div className="__className_5f0add antialiased text-[#1A1B1C] h-screen flex flex-col">
+      <div className="max-w-full flex mx-5 flex-col items-center bg-white text-center px-4 md:px-0">
+        <div className="relative w-full max-w-[1440px] mx-auto pb-40">
+          {/* Header */}
           <div className="text-start ml-4 mb-4 md:mb-10 md:ml-0 md:mt-20">
-            <h2 className="text-base md:text-base font-semibold mb-1 leading-[24px]">
+            <h2 className="text-base font-semibold mb-1 leading-[24px]">
               A.I. ANALYSIS
             </h2>
             <h3 className="text-4xl md:text-[72px] font-normal leading-[64px] tracking-tighter">
@@ -69,56 +113,65 @@ const Summary = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-[1.5fr_8.5fr_3.15fr] gap-4 mt-10 mb-20 md:mb-0">
-            {/* FIRST COLUMN */}
+            {/* Column 1: Selectable Categories */}
             <div className="space-y-3 md:flex md:flex-col">
-              <div className="p-3 cursor-pointer bg-[#1A1B1C] text-white hover:bg-black flex flex-col justify-between border-t">
-                <p className="text-base font-semibold">{topRace || "N/A"}</p>
-                <h4 className="text-base font-semibold mb-1">RACE</h4>
-              </div>
-              <div className="p-3 cursor-pointer bg-[#F3F3F4] hover:bg-[#E1E1E2] flex flex-col justify-between border-t">
-                <p className="text-base font-semibold">{topAge || "N/A"}</p>
-                <h4 className="text-base font-semibold mb-1">AGE</h4>
-              </div>
-              <div className="p-3 cursor-pointer bg-[#F3F3F4] hover:bg-[#E1E1E2] flex flex-col justify-between border-t">
-                <p className="text-base font-semibold">{topGender || "N/A"}</p>
-                <h4 className="text-base font-semibold mb-1">SEX</h4>
-              </div>
+              {[
+                { label: topRace || "N/A", type: "race" },
+                { label: topAge || "N/A", type: "age" },
+                { label: topGender || "N/A", type: "gender" },
+              ].map(({ label, type }) => (
+                <div
+                  key={type}
+                  onClick={() => setSelectedCategory(type)}
+                  className={`p-3 cursor-pointer ${
+                    selectedCategory === type
+                      ? "bg-[#1A1B1C] text-white"
+                      : "bg-[#F3F3F4] hover:bg-[#E1E1E2]"
+                  } flex flex-col justify-between border-t`}
+                >
+                  <p className="text-base font-semibold">{label}</p>
+                  <h4 className="text-base font-semibold mb-1 uppercase">
+                    {type}
+                  </h4>
+                </div>
+              ))}
             </div>
 
-            {/* SECOND COLUMN */}
-            <div className="relative bg-gray-100 p-4 flex flex-col items-center justify-center md:h-[57vh] md:border-t">
+            {/* Column 2: Center Visualization */}
+            <div className="relative bg-gray-100 p-4 flex flex-col items-center justify-center md:h-auto max-h-[90vh] md:border-t overflow-hidden">
               <p className="hidden md:block md:absolute text-[40px] mb-2 left-5 top-2">
                 {topRace || "RACE"}
               </p>
-              <div className="relative md:absolute w-full max-w-[384px] aspect-square mb-4 md:right-5 md:bottom-2">
-                <div className="w-full h-full max-h-[384px] relative scale-[1] origin-center">
+              <div className="relative w-full aspect-square max-w-[384px] md:max-w-[340px] lg:max-w-[300px] xl:max-w-[280px] 2xl:max-w-[240px] flex items-center justify-center mt-8">
+                <div className="w-full h-full">
                   <svg
-                    height={radius * 2}
-                    width={radius * 2}
+                    className="w-full h-full"
                     viewBox={`0 0 ${radius * 2} ${radius * 2}`}
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <circle
-                      stroke="#C1C2C3"
-                      fill="transparent"
-                      strokeWidth={strokeWidth}
-                      r={normalizedRadius}
-                      cx={radius}
-                      cy={radius}
-                    />
-                    <circle
-                      stroke="#1A1B1C"
-                      fill="transparent"
-                      strokeWidth={strokeWidth}
-                      strokeDasharray={circumference}
-                      strokeDashoffset={strokeDashoffset}
-                      strokeLinecap="round"
-                      r={normalizedRadius}
-                      cx={radius}
-                      cy={radius}
-                      style={{ transition: "stroke-dashoffset 0.5s ease" }}
-                    />
+                    <g transform={`rotate(-90, ${radius}, ${radius})`}>
+                      <circle
+                        stroke="#C1C2C3"
+                        fill="transparent"
+                        strokeWidth={strokeWidth}
+                        r={normalizedRadius}
+                        cx={radius}
+                        cy={radius}
+                      />
+                      <circle
+                        stroke="#1A1B1C"
+                        fill="transparent"
+                        strokeWidth={strokeWidth}
+                        strokeDasharray={circumference}
+                        strokeDashoffset={strokeDashoffset}
+                        strokeLinecap="round"
+                        r={normalizedRadius}
+                        cx={radius}
+                        cy={radius}
+                        style={{ transition: "stroke-dashoffset 0.5s ease" }}
+                      />
+                    </g>
                   </svg>
 
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -134,51 +187,63 @@ const Summary = () => {
               </p>
             </div>
 
-            {/* THIRD COLUMN */}
+            {/* Column 3: Options */}
             <div className="bg-gray-100 pt-4 pb-4 md:border-t">
               <div className="space-y-0">
                 <div className="flex justify-between px-4">
-                  <h4 className="text-base font-medium mb-2">RACE</h4>
+                  <h4 className="text-base font-medium mb-2 uppercase">
+                    {selectedCategory}
+                  </h4>
                   <h4 className="text-base font-medium mb-2">
                     A.I. CONFIDENCE
                   </h4>
                 </div>
-                {raceOptions.map(({ label, percent, active }, idx) => (
-                  <div
-                    key={idx}
-                    className={`flex items-center justify-between h-[48px] px-4 cursor-pointer hover:bg-[#E1E1E2] ${
-                      active ? "bg-[#1A1B1C] text-white hover:bg-black" : ""
-                    }`}
-                  >
-                    <div className="flex items-center gap-1">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M11.293 6L6 11.293L0.707031 6L6 0.707031L11.293 6Z"
-                          stroke="#1A1B1C"
-                        />
-                      </svg>
-                      <span className="font-normal text-base leading-6 tracking-tight">
-                        {label}
-                      </span>
+                {categoryOptions[selectedCategory]?.map(
+                  ({ label, percent, active }, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex items-center justify-between h-[48px] px-4 cursor-pointer hover:bg-[#E1E1E2] ${
+                        active ? "bg-[#1A1B1C] text-white hover:bg-black" : ""
+                      }`}
+                      onClick={() => handleOptionClick(label)}
+                    >
+                      <div className="flex items-center gap-1">
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11.293 6L6 11.293L0.707031 6L6 0.707031L11.293 6Z"
+                            stroke={active ? "#FFFFFF" : "#1A1B1C"}
+                          />
+                        </svg>
+                        <span className="font-normal text-base">
+                          {label}
+                        </span>
+                      </div>
+                      <span className="font-normal text-base">{percent}</span>
                     </div>
-                    <span className="font-normal text-base leading-6 tracking-tight">
-                      {percent}
-                    </span>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="absolute bottom-[38.5px] md:bottom-8 w-full max-w-[1440px] flex justify-between md:px-9 px-4 z-50">
-          <a className="pt-btn9" aria-label="Back" href="/select">
+        {/* Bottom Navigation */}
+        <div className="fixed bottom-[38.5px] md:bottom-8 w-full max-w-[1440px] flex justify-between md:px-9 px-4 z-50">
+          <button
+            className="pt-btn9"
+            aria-label="Back"
+            onClick={() =>
+              navigate("/select", {
+                state: { imageBase64: base64String, apiResult },
+              })
+            }
+          >
             <div>
               <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
                 <span className="rotate-[-45deg] text-xs font-semibold">
@@ -195,9 +260,13 @@ const Summary = () => {
                 <span className="text-sm font-semibold ml-6">BACK</span>
               </div>
             </div>
-          </a>
+          </button>
 
-          <a className="pt-btn9" aria-label="Proceed" href="/">
+          <button
+            className="pt-btn9"
+            aria-label="Proceed"
+            onClick={() => navigate("/")}
+          >
             <div>
               <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
                 <span className="rotate-[-45deg] text-xs font-semibold">
@@ -214,7 +283,7 @@ const Summary = () => {
                 </div>
               </div>
             </div>
-          </a>
+          </button>
         </div>
       </div>
     </div>

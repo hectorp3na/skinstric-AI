@@ -1491,6 +1491,10 @@
 
 .diamondRect:hover {
   fill: #d1d5db;  
+  stroke: #1A1B1C;
+  stroke-width: 2;
+  transition: all 0.3s ease;
+
 }
 
 .pulse {
