@@ -4,9 +4,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 const Summary = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const base64String =
-  location.state?.imageBase64 || localStorage.getItem("imageBase64");
-   const apiResult = location.state?.apiResult
+    location.state?.imageBase64 || localStorage.getItem("imageBase64");
+  const apiResult = location.state?.apiResult
     ? location.state.apiResult
     : JSON.parse(localStorage.getItem("apiResult") || "null");
 
@@ -76,6 +77,7 @@ const Summary = () => {
     },
     [topEntry]
   );
+
   useEffect(() => {
     if (location.state?.imageBase64 && location.state?.apiResult) {
       localStorage.setItem("imageBase64", location.state.imageBase64);
@@ -126,7 +128,7 @@ const Summary = () => {
 
   return (
     <div className="__className_5f0add antialiased text-[#1A1B1C] h-screen flex flex-col">
-      <div className="max-w-full flex mx-5 flex-col items-center bg-white text-center px-4 md:px-0">
+      <div className="scroll-on-mobile max-w-full flex mx-5 flex-col items-center bg-white text-center px-4 md:px-0">
         <div className="relative w-full max-w-[1440px] mx-auto pb-40">
           {/* Header */}
           <div className="text-start ml-4 mb-4 md:mb-10 md:ml-0 md:mt-20">
@@ -149,34 +151,37 @@ const Summary = () => {
                 { label: topAge || "N/A", type: "age" },
                 { label: topGender || "N/A", type: "gender" },
               ].map(({ label, type }) => (
-                <div
+                <button
                   key={type}
                   onClick={() => setSelectedCategory(type)}
-                  className={`p-3 cursor-pointer ${
-                    selectedCategory === type
-                      ? "bg-[#1A1B1C] text-white"
-                      : "bg-[#F3F3F4] hover:bg-[#E1E1E2]"
-                  } flex flex-col justify-between border-t`}
+                  className={`block w-full px-4 py-3 text-left border-t relative z-10 transition-all duration-150 ease-out cursor-pointer
+                    ${
+                      selectedCategory === type
+                        ? "bg-[#1A1B1C] text-white hover:bg-black"
+                        : "bg-[#F3F3F4] hover:bg-[#E1E1E2] hover:scale-[1.01]"
+                    }`}
                 >
                   <p className="text-base font-semibold">{label}</p>
                   <h4 className="text-base font-semibold mb-1 uppercase">
                     {type}
                   </h4>
-                </div>
+                </button>
               ))}
             </div>
 
             {/* Second Column */}
-            <div className="relative bg-gray-100 p-4 flex flex-col items-center justify-center md:h-auto max-h-[90vh] md:border-t overflow-hidden">
+            <div className="relative bg-gray-100 w-full h-[540px] md:h-[560px] flex flex-col items-center justify-center border-t overflow-visible ">
               <p className="hidden md:block md:absolute text-[40px] mb-2 left-5 top-2">
                 {(() => {
                   const active = categoryOptions[selectedCategory]?.find(
                     (o) => o.active
                   );
-                  return active?.label || selectedCategory.toUpperCase();
+                  return selectedCategory === "age"
+                    ? `${active?.label ?? selectedCategory.toUpperCase()} y.o.`
+                    : active?.label || selectedCategory.toUpperCase();
                 })()}
               </p>
-              <div className="relative w-full aspect-square max-w-[384px] md:max-w-[340px] lg:max-w-[300px] xl:max-w-[280px] 2xl:max-w-[240px] flex items-center justify-center mt-8">
+              <div className="relative w-full aspect-square max-w-[384px] md:max-w-[340px] lg:max-w-[300px] xl:max-w-[280px] 2xl:max-w-[240px] flex items-center justify-center mt-12 mb-8">
                 <div className="w-full h-full">
                   <svg
                     className="w-full h-full"
@@ -234,12 +239,16 @@ const Summary = () => {
                 </div>
                 {categoryOptions[selectedCategory]?.map(
                   ({ label, percent, active }, idx) => (
-                    <div
+                    <button
                       key={idx}
-                      className={`flex items-center justify-between h-[48px] px-4 cursor-pointer hover:bg-[#E1E1E2] ${
-                        active ? "bg-[#1A1B1C] text-white hover:bg-black" : ""
-                      }`}
+                      
                       onClick={() => handleOptionClick(label)}
+                      className={`flex w-full px-4 py-3 text-left items-center justify-between relative z-10 transition-all duration-150 ease-out cursor-pointer
+                        ${
+                          active
+                            ? "bg-[#1A1B1C] text-white hover:bg-black"
+                            : "bg-transparent hover:bg-[#E1E1E2] hover:scale-[1.01]"
+                        }`}
                     >
                       <div className="flex items-center gap-1">
                         <svg
@@ -257,7 +266,7 @@ const Summary = () => {
                         <span className="font-normal text-base">{label}</span>
                       </div>
                       <span className="font-normal text-base">{percent}</span>
-                    </div>
+                    </button>
                   )
                 )}
               </div>
@@ -266,9 +275,9 @@ const Summary = () => {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="fixed bottom-[38.5px] md:bottom-8 w-full max-w-[1440px] flex justify-between md:px-9 px-4 z-50">
+        <div className="fixed bottom-[38.5px] md:bottom-8 W-95 max-w-[1440px] flex justify-between md:px-9 px-4 z-50">
           <button
-            className="pt-btn9"
+          
             aria-label="Back"
             onClick={() =>
               navigate("/select", {
@@ -294,11 +303,7 @@ const Summary = () => {
             </div>
           </button>
 
-          <button
-            className="pt-btn9"
-            aria-label="Proceed"
-            onClick={() => navigate("/")}
-          >
+          <button aria-label="Proceed" onClick={() => navigate("/")}>
             <div>
               <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
                 <span className="rotate-[-45deg] text-xs font-semibold">

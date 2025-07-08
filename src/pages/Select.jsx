@@ -18,7 +18,8 @@ const Select = () => {
         paddingLeft: "2.25rem",
         paddingRight: "2.25rem",
         marginTop: "-3rem",
-        minHeight: "764px",
+        height: "auto",
+        minHeight: "100vh",
         overflow: "visible",
         display: "flex",
         flexDirection: "column",
@@ -172,8 +173,8 @@ const Select = () => {
         </svg>
       </div>
 
-      <div className="absolute bottom-[38.5px] md:bottom-8 w-95 flex justify-between md:px-9 px-13 z-50">
-        <Link to="/result" className="pt-btn9" aria-label="Back">
+      <div className="absolute bottom-6 md:bottom-8 w-95 flex justify-between md:px-9 px-13 z-50">
+        <Link to="/result" className="" aria-label="Back">
           <div>
             <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
               <span className="rotate-[-45deg] text-xs font-semibold">
@@ -197,7 +198,7 @@ const Select = () => {
             pathname: "/summary",
           }}
           state={{ imageBase64: base64String, apiResult: apiResult }}
-          className="pt-btn9"
+          className=""
           aria-label="Proceed"
         >
           <div>

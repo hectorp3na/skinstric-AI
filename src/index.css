@@ -1023,7 +1023,12 @@
   }
 
   .w-95 {
-    width: 95%
+    width: 95%;
+    margin-top: 300px;
+  }
+
+  .W-95 {
+      width: 95%
   }
 
   .w-screen {
@@ -1495,6 +1500,21 @@
   stroke-width: 2;
   transition: all 0.3s ease;
 
+}
+
+.scroll-on-mobile {
+  overflow-y: auto;
+  max-height: 100dvh;
+  padding-bottom: 120px;
+  scrollbar-gutter: stable;
+}
+
+@media (min-width: 768px) {
+  .scroll-on-mobile {
+    overflow-y: visible;
+    height: auto;
+    padding-bottom: 0;
+  }
 }
 
 .pulse {
