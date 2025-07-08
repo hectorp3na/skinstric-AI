@@ -4,14 +4,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 const Summary = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const base64String = location.state?.imageBase64;
-  const apiResult = location.state?.apiResult;
+  const base64String =
+  location.state?.imageBase64 || localStorage.getItem("imageBase64");
+   const apiResult = location.state?.apiResult
+    ? location.state.apiResult
+    : JSON.parse(localStorage.getItem("apiResult") || "null");
 
   const [topAge, setTopAge] = useState(null);
   const [topGender, setTopGender] = useState(null);
   const [topRace, setTopRace] = useState(null);
   const [topRaceScore, setTopRaceScore] = useState(0);
-  
 
   const [selectedCategory, setSelectedCategory] = useState("race");
   const [categoryOptions, setCategoryOptions] = useState({});
@@ -20,10 +22,16 @@ const Summary = () => {
   const strokeWidth = 8;
   const normalizedRadius = radius - strokeWidth / 2;
   const circumference = 2 * Math.PI * normalizedRadius;
-  const strokeDashoffset =
-    topRaceScore !== null
-      ? circumference - topRaceScore * circumference
-      : circumference;
+
+  const getTopScore = () => {
+    if (selectedCategory === "race") return topRaceScore;
+    const selected = categoryOptions[selectedCategory]?.find(
+      (item) => item.active
+    );
+    return selected ? parseFloat(selected.percent) / 100 : 0;
+  };
+
+  const strokeDashoffset = circumference - getTopScore() * circumference;
 
   const topEntry = useCallback((obj) => {
     if (!obj || Object.keys(obj).length === 0) return [null, 0];
@@ -32,37 +40,51 @@ const Summary = () => {
 
   const fetchDemographics = useCallback(
     (data) => {
-      const capitalize = (str) => {
-        if (!str || typeof str !== "string") return str;
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-      };
+      try {
+        const capitalize = (str) => {
+          if (!str || typeof str !== "string") return str;
+          return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        };
 
-      const [age] = topEntry(data.age);
-      const [gender] = topEntry(data.gender);
-      const [race, raceScore] = topEntry(data.race);
+        const [age] = topEntry(data.age);
+        const [genderRaw] = topEntry(data.gender);
+        const gender = capitalize(genderRaw);
+        const [race, raceScore] = topEntry(data.race);
 
-      setTopAge(age);
-      setTopGender(capitalize(gender));
-      setTopRace(capitalize(race));
-      setTopRaceScore(raceScore);
+        setTopAge(age);
+        setTopGender(capitalize(gender));
+        setTopRace(capitalize(race));
+        setTopRaceScore(raceScore);
 
-      const formatOptions = (category, top) =>
-        Object.entries(data[category])
-          .sort((a, b) => b[1] - a[1])
-          .map(([label, value]) => ({
-            label: capitalize(label),
-            percent: (value * 100).toFixed(0) + "%",
-            active: capitalize(label) === capitalize(top),
-          }));
+        const formatOptions = (category, top) =>
+          Object.entries(data[category])
+            .sort((a, b) => b[1] - a[1])
+            .map(([label, value]) => ({
+              label: capitalize(label),
+              percent: (value * 100).toFixed(0) + "%",
+              active: label.toLowerCase() === top.toLowerCase(),
+            }));
 
-      setCategoryOptions({
-        race: formatOptions("race", race),
-        age: formatOptions("age", age),
-        gender: formatOptions("gender", gender),
-      });
+        setCategoryOptions({
+          race: formatOptions("race", race),
+          age: formatOptions("age", age),
+          gender: formatOptions("gender", gender),
+        });
+      } catch (error) {
+        console.error("Error fetching demographics:", error);
+      }
     },
     [topEntry]
   );
+  useEffect(() => {
+    if (location.state?.imageBase64 && location.state?.apiResult) {
+      localStorage.setItem("imageBase64", location.state.imageBase64);
+      localStorage.setItem(
+        "apiResult",
+        JSON.stringify(location.state.apiResult)
+      );
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (!base64String || !apiResult) {
@@ -73,12 +95,15 @@ const Summary = () => {
   }, [base64String, apiResult, navigate, fetchDemographics]);
 
   const handleOptionClick = (label) => {
+    const lowerLabel = label.toLowerCase();
+
     if (selectedCategory === "race") {
       setTopRace(label);
+      const selectedOption = categoryOptions["race"]?.find(
+        (o) => o.label.toLowerCase() === lowerLabel
+      );
       setTopRaceScore(
-        parseInt(
-          categoryOptions["race"].find((o) => o.label === label)?.percent
-        ) / 100
+        selectedOption ? parseFloat(selectedOption.percent) / 100 : 0
       );
     } else if (selectedCategory === "age") {
       setTopAge(label);
@@ -86,13 +111,17 @@ const Summary = () => {
       setTopGender(label);
     }
 
-    setCategoryOptions((prev) => ({
-      ...prev,
-      [selectedCategory]: prev[selectedCategory].map((item) => ({
+    setCategoryOptions((prev) => {
+      const updatedCategory = prev[selectedCategory]?.map((item) => ({
         ...item,
-        active: item.label === label,
-      })),
-    }));
+        active: item.label.toLowerCase() === lowerLabel,
+      }));
+
+      return {
+        ...prev,
+        [selectedCategory]: updatedCategory,
+      };
+    });
   };
 
   return (
@@ -113,7 +142,7 @@ const Summary = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-[1.5fr_8.5fr_3.15fr] gap-4 mt-10 mb-20 md:mb-0">
-            {/* Column 1: Selectable Categories */}
+            {/* First Column */}
             <div className="space-y-3 md:flex md:flex-col">
               {[
                 { label: topRace || "N/A", type: "race" },
@@ -137,10 +166,15 @@ const Summary = () => {
               ))}
             </div>
 
-            {/* Column 2: Center Visualization */}
+            {/* Second Column */}
             <div className="relative bg-gray-100 p-4 flex flex-col items-center justify-center md:h-auto max-h-[90vh] md:border-t overflow-hidden">
               <p className="hidden md:block md:absolute text-[40px] mb-2 left-5 top-2">
-                {topRace || "RACE"}
+                {(() => {
+                  const active = categoryOptions[selectedCategory]?.find(
+                    (o) => o.active
+                  );
+                  return active?.label || selectedCategory.toUpperCase();
+                })()}
               </p>
               <div className="relative w-full aspect-square max-w-[384px] md:max-w-[340px] lg:max-w-[300px] xl:max-w-[280px] 2xl:max-w-[240px] flex items-center justify-center mt-8">
                 <div className="w-full h-full">
@@ -176,7 +210,7 @@ const Summary = () => {
 
                   <div className="absolute inset-0 flex items-center justify-center">
                     <p className="text-3xl md:text-[40px] font-normal">
-                      {Math.round(topRaceScore * 100)}
+                      {Math.round(getTopScore() * 100)}
                       <span className="absolute text-xl md:text-3xl">%</span>
                     </p>
                   </div>
@@ -187,7 +221,7 @@ const Summary = () => {
               </p>
             </div>
 
-            {/* Column 3: Options */}
+            {/* Third Column */}
             <div className="bg-gray-100 pt-4 pb-4 md:border-t">
               <div className="space-y-0">
                 <div className="flex justify-between px-4">
@@ -220,9 +254,7 @@ const Summary = () => {
                             stroke={active ? "#FFFFFF" : "#1A1B1C"}
                           />
                         </svg>
-                        <span className="font-normal text-base">
-                          {label}
-                        </span>
+                        <span className="font-normal text-base">{label}</span>
                       </div>
                       <span className="font-normal text-base">{percent}</span>
                     </div>
@@ -233,7 +265,7 @@ const Summary = () => {
           </div>
         </div>
 
-        {/* Bottom Navigation */}
+        {/* Navigation Buttons */}
         <div className="fixed bottom-[38.5px] md:bottom-8 w-full max-w-[1440px] flex justify-between md:px-9 px-4 z-50">
           <button
             className="pt-btn9"
