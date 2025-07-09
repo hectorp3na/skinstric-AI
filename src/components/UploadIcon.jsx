@@ -36,7 +36,7 @@ const UploadIcon = ({ onFileSelect}) => {
 
         const result = await response.json();
         if (result.success && result.data) {
-            navigate("/summary", {
+            navigate("/select", {
               state: {
                 imageBase64: base64,
                 apiResult: result.data,

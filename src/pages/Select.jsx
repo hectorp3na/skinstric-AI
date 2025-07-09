@@ -172,9 +172,10 @@ const Select = () => {
           />
         </svg>
       </div>
-
-      <div className="absolute bottom-6 md:bottom-8 w-95 flex justify-between md:px-9 px-13 z-50">
-        <Link to="/result" className="" aria-label="Back">
+      
+      <div className="absolute bottom-6 md:bottom-14 w-90 flex justify-between md:px-9 px-4 z-50
+      ">
+        <Link to="/result" aria-label="Back">
           <div>
             <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
               <span className="rotate-[-45deg] text-xs font-semibold">

@@ -15,6 +15,43 @@ const Summary = () => {
   const [topGender, setTopGender] = useState(null);
   const [topRace, setTopRace] = useState(null);
   const [topRaceScore, setTopRaceScore] = useState(0);
+  const [originalSelections, setOriginalSelections] = useState({
+    race: null,
+    age: null,
+    gender: null,
+  });
+
+  const confirmHandler = () => {
+    console.log("Confirmed:", {
+      race: topRace,
+      age: topAge,
+      gender: topGender,
+    });
+    setOriginalSelections({ race: topRace, age: topAge, gender: topGender });
+  };
+  const resetHandler = () => {
+    // Reset current selections to original confirmed selections
+    setTopRace(originalSelections.race);
+    setTopAge(originalSelections.age);
+    setTopGender(originalSelections.gender);
+
+    // Reset active options as well if needed
+    setCategoryOptions((prev) => {
+      const resetCategory = (category) =>
+        prev[category].map((item) => ({
+          ...item,
+          active:
+            item.label.toLowerCase() ===
+            originalSelections[category].toLowerCase(),
+        }));
+
+      return {
+        race: resetCategory("race"),
+        age: resetCategory("age"),
+        gender: resetCategory("gender"),
+      };
+    });
+  };
 
   const [selectedCategory, setSelectedCategory] = useState("race");
   const [categoryOptions, setCategoryOptions] = useState({});
@@ -56,6 +93,11 @@ const Summary = () => {
         setTopGender(capitalize(gender));
         setTopRace(capitalize(race));
         setTopRaceScore(raceScore);
+        setOriginalSelections({
+          race: capitalize(race),
+          age,
+          gender,
+        });
 
         const formatOptions = (category, top) =>
           Object.entries(data[category])
@@ -129,7 +171,7 @@ const Summary = () => {
   return (
     <div className="__className_5f0add antialiased text-[#1A1B1C] h-screen flex flex-col">
       <div className="scroll-on-mobile max-w-full flex mx-5 flex-col items-center bg-white text-center px-4 md:px-0">
-        <div className="relative w-full max-w-[1440px] mx-auto pb-40">
+        <div className="relative w-full max-w-[1440px] mx-auto min-h-screen pb-[100px]">
           {/* Header */}
           <div className="text-start ml-4 mb-4 md:mb-10 md:ml-0 md:mt-20">
             <h2 className="text-base font-semibold mb-1 leading-[24px]">
@@ -240,8 +282,9 @@ const Summary = () => {
                 {categoryOptions[selectedCategory]?.map(
                   ({ label, percent, active }, idx) => (
                     <button
+
                       key={idx}
-                      
+
                       onClick={() => handleOptionClick(label)}
                       className={`flex w-full px-4 py-3 text-left items-center justify-between relative z-10 transition-all duration-150 ease-out cursor-pointer
                         ${
@@ -275,9 +318,10 @@ const Summary = () => {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="fixed bottom-[38.5px] md:bottom-8 W-95 max-w-[1440px] flex justify-between md:px-9 px-4 z-50">
+        <div className="absolute bottom-[38.5px] md:bottom-8 w-full flex justify-between md:px-9 px-6 z-50">
+          {/* Back Button */}
           <button
-          
+            className="cursor-pointer px-6"
             aria-label="Back"
             onClick={() =>
               navigate("/select", {
@@ -285,42 +329,72 @@ const Summary = () => {
               })
             }
           >
-            <div>
-              <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
-                <span className="rotate-[-45deg] text-xs font-semibold">
-                  BACK
-                </span>
-              </div>
-
-              <div className="group hidden sm:flex flex-row items-center relative">
-                <div className="relative w-12 h-12 border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300">
-                  <div className="absolute inset-0 flex items-center justify-center rotate-[-45deg]">
-                    <span className="rotate-180 scale-[0.9]">▶</span>
-                  </div>
-                </div>
-                <span className="text-sm font-semibold ml-6">BACK</span>
-              </div>
+            <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45">
+              <span className="rotate-[-45deg] text-xs font-semibold">
+                BACK
+              </span>
             </div>
           </button>
 
-          <button aria-label="Proceed" onClick={() => navigate("/")}>
-            <div>
-              <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
+          {/* Dynamic buttons based on change */}
+          {topRace !== originalSelections.race ||
+          topAge !== originalSelections.age ||
+          topGender !== originalSelections.gender ? (
+            <div className="flex gap-4">
+              {/* Reset Button */}
+              <button
+                aria-label="Reset"
+                onClick={resetHandler}
+                className="transition-transform duration-300 hover:-translate-x-1 hover:-translate-y-1 overflow-hidden cursor-pointer"
+              >
+                <svg
+                  width="75"
+                  height="37"
+                  viewBox="0 0 75 37"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="block"
+                >
+                  <rect x="1" y="1" width="73" height="35" stroke="#1A1B1C" />
+                  <path
+                    d="M25.064 21.382C24.994 20.486 24.56 19.758 23.888 19.338C24.7 18.918 25.204 18.232 25.204 17.224C25.204 15.446 24 14.2 21.956 14.2H17.938V24H19.8V20.318H21.914C22.642 20.318 23.16 20.85 23.23 21.592L23.468 24H25.302L25.064 21.382ZM21.872 15.754C22.964 15.754 23.412 16.44 23.412 17.224C23.412 18.008 22.964 18.722 21.872 18.722H19.8V15.754H21.872ZM33.6055 24V22.39H28.7755V19.772H32.5275V18.176H28.7755V15.796H33.4515V14.2H26.9275V24H33.6055ZM37.9886 24.112C40.1446 24.112 41.6426 23.006 41.6426 21.186C41.6426 17.364 36.3086 18.988 36.3086 16.818C36.3086 16.132 36.9106 15.684 37.8766 15.684C38.9126 15.684 39.5846 16.258 39.6686 17.112H41.4326C41.3486 15.278 39.9486 14.088 37.8766 14.088C35.8886 14.088 34.5026 15.208 34.5026 16.818C34.5026 20.57 39.7666 19.114 39.7666 21.214C39.7666 22.082 39.0386 22.502 37.9886 22.502C36.8126 22.502 36.0846 21.802 35.9866 20.71H34.2086C34.3066 22.768 35.7626 24.112 37.9886 24.112ZM49.3698 24V22.39H44.5398V19.772H48.2917V18.176H44.5398V15.796H49.2158V14.2H42.6917V24H49.3698ZM54.5368 24V15.796H57.4908V14.2H49.7208V15.796H52.6888V24H54.5368Z"
+                    fill="#1A1B1C"
+                  />
+                </svg>
+              </button>
+
+              {/* Confirm Button */}
+              <button
+                aria-label="Confirm"
+                onClick={confirmHandler}
+                className="transition-transform duration-300 hover:translate-x-1 hover:-translate-y-1 overflow-hidden cursor-pointer"
+              >
+                <svg
+                  width="95"
+                  height="35"
+                  viewBox="0 0 95 35"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="block"
+                >
+                  <rect width="95" height="35" fill="#1A1B1C" />
+                  <path
+                    d="M21.362 23.112C23.77 23.112 25.562 21.726 25.758 19.696H23.91C23.742 20.76 22.706 21.502 21.362 21.502C19.654 21.502 18.366 20.326 18.366 18.1C18.366 15.874 19.654 14.684 21.362 14.684C22.678 14.684 23.714 15.426 23.854 16.504H25.786C25.52 14.474 23.728 13.088 21.362 13.088C18.8 13.088 16.504 14.768 16.504 18.1C16.504 21.432 18.758 23.112 21.362 23.112ZM31.3519 23.112C34.1939 23.112 36.2939 20.984 36.2939 18.1C36.2939 15.216 34.1939 13.088 31.3519 13.088C28.4959 13.088 26.3959 15.216 26.3959 18.1C26.3959 20.984 28.4959 23.112 31.3519 23.112ZM31.3379 21.502C29.5599 21.502 28.2579 20.06 28.2579 18.1C28.2579 16.14 29.5599 14.684 31.3379 14.684C33.1299 14.684 34.4319 16.14 34.4319 18.1C34.4319 20.06 33.1299 21.502 31.3379 21.502ZM39.308 23V16.098L43.564 23H45.552V13.2H43.704V20.116L39.462 13.2H37.46V23H39.308ZM48.9948 23V18.884H52.7468V17.288H48.9948V14.796H53.6708V13.2H47.1468V23H48.9948ZM56.6995 23V13.2H54.8375V23H56.6995ZM65.416 20.382C65.346 19.486 64.912 18.758 64.24 18.338C65.052 17.918 65.556 17.232 65.556 16.224C65.556 14.446 64.352 13.2 62.308 13.2H58.29V23H60.152V19.318H62.266C62.994 19.318 63.512 19.85 63.582 20.592L63.82 23H65.654L65.416 20.382ZM62.224 14.754C63.316 14.754 63.764 15.44 63.764 16.224C63.764 17.008 63.316 17.722 62.224 17.722H60.152V14.754H62.224ZM69.0155 23V16.504L71.6895 23H73.0895L75.7495 16.504V23H77.4855V13.2H75.3575L72.3895 20.438L69.4215 13.2H67.2795V23H69.0155Z"
+                    fill="#FCFCFC"
+                  />
+                </svg>
+              </button>
+            </div>
+          ) : (
+            // HOME Button
+            <button aria-label="Proceed" onClick={() => navigate("/")} className="w-100 cursor-pointer px-6">
+              <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45">
                 <span className="rotate-[-45deg] text-xs font-semibold">
                   HOME
                 </span>
               </div>
-
-              <div className="group hidden sm:flex flex-row items-center relative">
-                <span className="text-sm font-semibold mr-5">HOME</span>
-                <div className="relative w-12 h-12 border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300">
-                  <div className="absolute inset-0 flex items-center justify-center rotate-[-45deg]">
-                    <span className="scale-[0.9]">▶</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </button>
+            </button>
+          )}
         </div>
       </div>
     </div>

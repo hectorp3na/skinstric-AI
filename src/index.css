@@ -1022,8 +1022,8 @@
       width: 100%
   }
 
-  .w-95 {
-    width: 95%;
+  .w-90 {
+    width: 93%;
     margin-top: 300px;
   }
 
@@ -1495,9 +1495,8 @@
 }
 
 .diamondRect:hover {
-  fill: #d1d5db;  
-  stroke: #1A1B1C;
-  stroke-width: 2;
+  fill: #d1d5db;
+
   transition: all 0.3s ease;
 
 }
@@ -2086,6 +2085,9 @@
 
       .md\:bottom-8 {
           bottom: calc(var(--spacing)*8)
+      }
+      .md\:bottom-14 {
+          bottom: calc(var(--spacing)*14)
       }
 
       .md\:bottom-\[-15\%\] {
