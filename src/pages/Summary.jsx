@@ -30,12 +30,12 @@ const Summary = () => {
     setOriginalSelections({ race: topRace, age: topAge, gender: topGender });
   };
   const resetHandler = () => {
-    // Reset current selections to original confirmed selections
+
     setTopRace(originalSelections.race);
     setTopAge(originalSelections.age);
     setTopGender(originalSelections.gender);
 
-    // Reset active options as well if needed
+    
     setCategoryOptions((prev) => {
       const resetCategory = (category) =>
         prev[category].map((item) => ({
@@ -318,7 +318,7 @@ const Summary = () => {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="absolute bottom-[38.5px] md:bottom-8 w-full flex justify-between md:px-9 px-6 z-50">
+        <div className="absolute bottom-8 md:bottom-8 w-full flex justify-between md:px-9 px-6 z-50">
           {/* Back Button */}
           <button
             className="cursor-pointer px-6"
@@ -336,7 +336,7 @@ const Summary = () => {
             </div>
           </button>
 
-          {/* Dynamic buttons based on change */}
+
           {topRace !== originalSelections.race ||
           topAge !== originalSelections.age ||
           topGender !== originalSelections.gender ? (
