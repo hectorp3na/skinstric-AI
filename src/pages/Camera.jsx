@@ -1,8 +1,34 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Camera = () => {
+  const [showCamera, setShowCamera] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      startCamera();
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+    }
+  };
+
   return (
     <div className=" w-full max-w-[444px] mx-auto" style={{ height: "444px" }}>
+        {isLoading ? (
+            <>
       <svg
         className="absolute top-1/2 left-1/2 w-[270px] h-[270px] md:w-[482px] md:h-[482px] 
              animate-spin-slower rotate-[200deg] -translate-x-1/2 -translate-y-1/2 z-0"
@@ -160,6 +186,16 @@ const Camera = () => {
           />
         </svg>
       </div>
+        ) : (
+       <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted
+        className="w-full h-full object-cover"
+      />
+    )}  
+       
     </div>
   );
 };
