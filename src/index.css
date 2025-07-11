@@ -502,9 +502,15 @@
   .bottom-8 {
       bottom: calc(var(--spacing)*8)
   }
+  .bottom-20 {
+      bottom: calc(var(--spacing)*20)
+  }
 
   .bottom-30 {
       bottom: calc(var(--spacing)*30)
+  }
+  .bottom--60 {
+      bottom: calc(var(--spacing)*-60)
   }
 
   .bottom-30\.5 {
@@ -538,6 +544,12 @@
   .left-0 {
       left: calc(var(--spacing)*0)
   }
+  .left--300 {
+      left: calc(var(--spacing)*-300)
+  }
+  .left--20 {
+      left: calc(var(--spacing)*-20)
+  }
 
   .left-1\/2 {
       left: 50%
@@ -560,7 +572,7 @@
   }
 
   .left-\[15px\] {
-      left: 65px
+      left: 15px
   }
 
   .left-\[18px\] {
@@ -1096,6 +1108,9 @@
 
   .-translate-y-1\/2 {
       --tw-translate-y: calc(calc(1/2*100%)*-1)
+  }
+  .-translate-y-\2 {
+      --tw-translate-y: calc(calc(1/2*100%)*2)
   }
   .-translate-y-16 {
       --tw-translate-y: calc(calc(1/2*100%)*16)
@@ -1999,6 +2014,9 @@
 
       .sm\:bottom-40 {
           bottom: calc(var(--spacing)*40)
+      }
+      .sm\:bottom-60 {
+          bottom: calc(var(--spacing)*-60)
       }
 
       .sm\:block {

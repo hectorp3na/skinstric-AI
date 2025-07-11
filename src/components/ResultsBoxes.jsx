@@ -1,10 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import UploadIcon from "./UploadIcon";
 import PreppingAnalysis from "./PreppingAnalysis";
 
 const ResultsBoxes = () => {
+   const navigate = useNavigate();
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [showCameraPrompt, setShowCameraPrompt] = useState(false);
+
+    const handleAllow = () => {
+    navigate("/camera");
+  };
 
   return isFileSelected ? (
     <PreppingAnalysis />
@@ -235,6 +241,7 @@ const ResultsBoxes = () => {
         <button
           onClick={() => {
             setShowCameraPrompt(false);
+            handleAllow();
           }}
           className="px-5 md:translate-x-45 text-[#FCFCFC] font-semibold text-sm leading-4 tracking-tight cursor-pointer hover:text-gray-300"
         >
