@@ -5,8 +5,13 @@ const Summary = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const base64String =
+  const rawBase64 =
     location.state?.imageBase64 || localStorage.getItem("imageBase64");
+
+  const prefix = "data:image/png;base64,";
+  const base64String = rawBase64?.startsWith("data:image")
+    ? rawBase64
+    : prefix + rawBase64;
   const apiResult = location.state?.apiResult
     ? location.state.apiResult
     : JSON.parse(localStorage.getItem("apiResult") || "null");
@@ -21,21 +26,51 @@ const Summary = () => {
     gender: null,
   });
 
-  const confirmHandler = () => {
-    console.log("Confirmed:", {
-      race: topRace,
-      age: topAge,
-      gender: topGender,
-    });
-    setOriginalSelections({ race: topRace, age: topAge, gender: topGender });
-  };
-  const resetHandler = () => {
+  const cleanBase64 = base64String?.startsWith("data:")
+    ? base64String.split(",")[1]
+    : base64String;
 
+  const confirmHandler = async () => {
+    const payload = {
+      image: cleanBase64,
+      demographics: {
+        race: topRace,
+        age: topAge,
+        gender: topGender,
+      },
+      timestamp: new Date().toISOString(),
+    };
+    try {
+      const response = await fetch(
+        "https://us-central1-api-skinstric-ai.cloudfunctions.net/skinstricPhaseTwo",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`API error: ${response.status} - ${errorText}`);
+      }
+
+
+      setOriginalSelections({
+        race: topRace,
+        age: topAge,
+        gender: topGender,
+      });
+    } catch (error) {
+      console.error("Error sending demographics data:", error);
+    }
+  };
+
+  const resetHandler = () => {
     setTopRace(originalSelections.race);
     setTopAge(originalSelections.age);
     setTopGender(originalSelections.gender);
 
-    
     setCategoryOptions((prev) => {
       const resetCategory = (category) =>
         prev[category].map((item) => ({
@@ -172,7 +207,7 @@ const Summary = () => {
     <div className="__className_5f0add antialiased text-[#1A1B1C] h-screen flex flex-col">
       <div className="scroll-on-mobile max-w-full flex mx-5 flex-col items-center bg-white text-center px-4 md:px-0">
         <div className="relative w-full max-w-[1440px] mx-auto min-h-screen pb-[100px]">
-          {/* Header */}
+
           <div className="text-start ml-4 mb-4 md:mb-10 md:ml-0 md:mt-20">
             <h2 className="text-base font-semibold mb-1 leading-[24px]">
               A.I. ANALYSIS
@@ -186,7 +221,7 @@ const Summary = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-[1.5fr_8.5fr_3.15fr] gap-4 mt-10 mb-20 md:mb-0">
-            {/* First Column */}
+
             <div className="space-y-3 md:flex md:flex-col">
               {[
                 { label: topRace || "N/A", type: "race" },
@@ -211,7 +246,7 @@ const Summary = () => {
               ))}
             </div>
 
-            {/* Second Column */}
+
             <div className="relative bg-gray-100 w-full h-[540px] md:h-[560px] flex flex-col items-center justify-center border-t overflow-visible ">
               <p className="hidden md:block md:absolute text-[40px] mb-2 left-5 top-2">
                 {(() => {
@@ -268,7 +303,7 @@ const Summary = () => {
               </p>
             </div>
 
-            {/* Third Column */}
+ 
             <div className="bg-gray-100 pt-4 pb-4 md:border-t">
               <div className="space-y-0">
                 <div className="flex justify-between px-4">
@@ -317,9 +352,9 @@ const Summary = () => {
           </div>
         </div>
 
-        {/* Navigation Buttons */}
+
         <div className="absolute bottom-8 md:bottom-8 w-full flex justify-between md:px-9 px-6 z-50">
-          {/* Back Button */}
+
           <button
             className="cursor-pointer px-6"
             aria-label="Back"
@@ -341,7 +376,7 @@ const Summary = () => {
           topAge !== originalSelections.age ||
           topGender !== originalSelections.gender ? (
             <div className="flex gap-4">
-              {/* Reset Button */}
+         
               <button
                 aria-label="Reset"
                 onClick={resetHandler}
@@ -363,7 +398,7 @@ const Summary = () => {
                 </svg>
               </button>
 
-              {/* Confirm Button */}
+    
               <button
                 aria-label="Confirm"
                 onClick={confirmHandler}
@@ -386,8 +421,12 @@ const Summary = () => {
               </button>
             </div>
           ) : (
-            // HOME Button
-            <button aria-label="Proceed" onClick={() => navigate("/")} className="w-100 cursor-pointer px-6">
+    
+            <button
+              aria-label="Proceed"
+              onClick={() => navigate("/")}
+              className="w-100 cursor-pointer px-6"
+            >
               <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45">
                 <span className="rotate-[-45deg] text-xs font-semibold">
                   HOME

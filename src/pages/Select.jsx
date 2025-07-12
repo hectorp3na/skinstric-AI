@@ -109,11 +109,19 @@ const Select = () => {
         >
           <g
             role="button"
+            tabIndex={0}
             onClick={() =>
               navigate("/summary", {
-                state: { imageBase64: base64String, apiResult: apiResult },
+                state: { imageBase64: base64String, apiResult },
               })
             }
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                navigate("/summary", {
+                  state: { imageBase64: base64String, apiResult },
+                });
+              }
+            }}
             style={{ cursor: "pointer" }}
           >
             <title>Go to Summary</title>
@@ -172,9 +180,11 @@ const Select = () => {
           />
         </svg>
       </div>
-      
-      <div className="absolute bottom-6 md:bottom-14 w-90 flex justify-between md:px-9 px-4 z-50
-      ">
+
+      <div
+        className="absolute bottom-6 md:bottom-14 w-90 flex justify-between md:px-9 px-4 z-50
+      "
+      >
         <Link to="/result" aria-label="Back">
           <div>
             <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
