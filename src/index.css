@@ -505,6 +505,9 @@
   .bottom-20 {
       bottom: calc(var(--spacing)*20)
   }
+  .bottom-25 {
+      bottom: calc(var(--spacing)*25)
+  }
 
   .bottom-30 {
       bottom: calc(var(--spacing)*30)
@@ -1286,6 +1289,9 @@
 
   .gap-4 {
       gap: calc(var(--spacing)*4)
+  }
+  .gap-6 {
+      gap: calc(var(--spacing)*6)
   }
 
   :where(.space-y-0>:not(:last-child)) {
@@ -2110,6 +2116,13 @@
       .md\:bottom-8 {
           bottom: calc(var(--spacing)*8)
       }
+      .md\:bottom-25 {
+          bottom: calc(var(--spacing)*25)
+      }
+      .md\:bottom-30 {
+          bottom: calc(var(--spacing)*30)
+      }
+
       .md\:bottom-14 {
           bottom: calc(var(--spacing)*14)
       }

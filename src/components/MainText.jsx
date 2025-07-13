@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const MainText = ({
   title = "Sophisticated",
@@ -7,6 +7,11 @@ const MainText = ({
   desktopDescription,
   hoverDirection,
 }) => {
+  const [fadeIn, setFadeIn] = useState(false);
+
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
 
   let transform;
   if (hoverDirection === "left") {
@@ -19,10 +24,14 @@ const MainText = ({
 
   return (
     <>
-      {/* Heading */}
+
       <div
         id="main-heading"
         className="relative z-10 text-center transition-all duration-500"
+        style={{
+          opacity: fadeIn ? 1 : 0,
+          transition: "opacity 1s ease",
+        }}
       >
         <h1
           style={{ transform, transition: "transform 0.3s ease" }}
@@ -34,14 +43,14 @@ const MainText = ({
         </h1>
       </div>
 
-      {/* Mobile Paragraph */}
+
       {mobileDescription && (
         <p className="z-10 block lg:hidden w-[30ch] mt-4 text-[16px] font-semibold text-center text-[#1a1b1c83]">
           {mobileDescription}
         </p>
       )}
 
-      {/* Desktop Paragraph */}
+
       {desktopDescription && (
         <div className="hidden lg:block fixed bottom-[calc(-7vh)] left-[calc(-20vw)] xl:left-[calc(-27vw)] 2xl:left-[calc(-31vw)] font-normal text-sm text-[#1A1B1C] space-y-3 uppercase">
           <p>{desktopDescription}</p>

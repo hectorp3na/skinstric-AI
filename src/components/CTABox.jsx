@@ -8,7 +8,7 @@ const CTABox = ({
   setHoverDirection,
 }) => {
   const isLeft = side === "left";
-  const isHovered = hoverDirection === side;
+  
   const isOppositeHovered = hoverDirection && hoverDirection !== side;
 
   const transform = isOppositeHovered
