@@ -8,7 +8,7 @@ const CTABox = ({
   setHoverDirection,
 }) => {
   const isLeft = side === "left";
-  
+  const isHovered = hoverDirection === side;
   const isOppositeHovered = hoverDirection && hoverDirection !== side;
 
   const transform = isOppositeHovered
@@ -25,36 +25,36 @@ const CTABox = ({
         pointerEvents: isOppositeHovered ? "none" : "auto",
         transition: "transform 0.3s ease, opacity 0.3s ease",
       }}
-      className={`hidden lg:block fixed top-1/2 -translate-y-1/2 w-[500px] h-[500px] ${
-        isLeft
-          ? "left-[calc(-53vw)] xl:left-[calc(-50vw)]"
-          : "right-[calc(-53vw)] xl:right-[calc(-50vw)]"
-      }`}
+      className={`hidden lg:block fixed top-1/2 -translate-y-1/2 w-[500px] h-[500px] z-10
+        ${isLeft ? "left-[-250px]" : "right-[-250px]"}`}
     >
       <div className="relative w-full h-full">
-        <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 absolute inset-0" />
+        <div className="absolute inset-0 border border-[#A0A4AB] rotate-45 pointer-events-none" />
+
         {link && (
           <a href={link}>
             <button
               onMouseEnter={() => setHoverDirection(side)}
               onMouseLeave={() => setHoverDirection(null)}
-              className={`inline-flex items-center gap-4 text-sm text-[#1A1B1C] h-9 absolute top-1/2 ${
-                isLeft
-                  ? "right-0 -translate-x-1/5 xl:translate-x-1/6"
-                  : "left-0 -translate-x-1/5 xl:-translate-x-1/6"
-              } -translate-y-1/2 px-3 py-1 cursor-pointer ease duration-300 hover:text-black group`}
+              className={`absolute top-1/2 -translate-y-1/2 text-xs uppercase tracking-tight text-[#1A1B1C] font-medium flex items-center gap-3 group
+                ${isLeft ? "right-[45px]" : "left-[45px]"}`}
             >
               {isLeft && (
-                <div className="w-[30px] h-[30px] border border-black rotate-45 transition-transform duration-300 group-hover:scale-125" />
+                <div className="w-[20px] h-[20px] border border-black rotate-45 transition-transform duration-300 group-hover:scale-110" />
               )}
+
               <span>{label}</span>
+
               {!isLeft && (
-                <div className="w-[30px] h-[30px] border border-black rotate-45 transition-transform duration-300 group-hover:scale-125" />
+                <div className="w-[20px] h-[20px] border border-black rotate-45 transition-transform duration-300 group-hover:scale-110" />
               )}
+
               <span
-                className={`absolute top-[9px] ${
-                  isLeft ? "left-[18px] rotate-180" : "left-[107px]"
-                } scale-[0.9]`}
+                className={`absolute top-1/2 transform -translate-y-1/2 text-[12px] ${
+                  isLeft
+                    ? "left-[15px] rotate-180"
+                    : "right-[15px]"
+                }`}
               >
                 ▶
               </span>

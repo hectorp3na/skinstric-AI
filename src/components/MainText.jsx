@@ -45,7 +45,7 @@ const MainText = ({
 
 
       {mobileDescription && (
-        <p className="z-10 block lg:hidden w-[30ch] mt-4 text-[16px] font-semibold text-center text-[#1a1b1c83]">
+        <p className="z-10 block lg:hidden w-[30ch] text-[16px] font-semibold text-center text-[#1a1b1c83]">
           {mobileDescription}
         </p>
       )}

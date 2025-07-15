@@ -2,10 +2,10 @@ import React from "react";
 
 const CTAButton = () => {
     return (
-        <div className="z-10 mt-4 lg:hidden">
+        <div className="z-10 lg:hidden">
               <a href="/testing">
-                <button className="relative flex items-center gap-4 transition duration-300 hover:scale-105">
-                  <span className="text-[12px] font-bold">
+                <button className="relative flex items-center gap-4 transition duration-300 hover:scale-105" style={{ marginTop: "10px"}}>
+                  <span className="text-[12px] font-bold cursor cursor-pointer">
                     ENTER EXPERIENCE
                   </span>
                   <div className="w-[24px] h-[24px] border border-black rotate-45" />
