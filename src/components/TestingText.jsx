@@ -67,7 +67,8 @@ const TestingText = ({
   };
   return (
     <div className="relative min-h-screen px-4">
-      <p className="text-sm text-gray-400 tracking-wider uppercase mb-1">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10">
+      <p className="text-sm text-gray-400 tracking-wider uppercase mb-1 whitespace-nowrap">
         {step === 1
           ? "CLICK TO TYPE"
           : isSubmitted
@@ -114,10 +115,11 @@ const TestingText = ({
         </form>
       ) : (
         <div className="flex flex-col items-center mt-6">
-          <p className="text-3xl font-semibold text-[#1A1B1C]">Thank you!</p>
-          <p className="mt-2 text-lg text-gray-600">Proceed to the next step</p>
+          <p className="text-3xl font-semibold text-[#1A1B1C] whitespace-nowrap">Thank you!</p>
+          <p className="mt-2 text-lg text-gray-600 whitespace-nowrap">Proceed to the next step</p>
         </div>
       )}
+    </div>
     </div>
   );
 };

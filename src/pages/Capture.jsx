@@ -25,10 +25,18 @@ const Capture = () => {
   const stopCamera = () => {
     if (videoRef.current?.srcObject) {
       videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+
     }
   };
 
-  useEffect(() => {
+useEffect(() => {
+  navigator.mediaDevices.enumerateDevices().then((devices) => {
+    const videoInputs = devices.filter((d) => d.kind === "videoinput");
+    console.log("Video input devices:", videoInputs);
+    if (videoInputs.length === 0) {
+      alert("No camera devices found.");
+    }
+  });
     startCamera();
     return stopCamera;
   }, []);
