@@ -181,53 +181,47 @@ const Select = () => {
         </svg>
       </div>
 
-      <div
-        className="absolute bottom-6 md:bottom-14 w-90 flex justify-between md:px-9 px-4 z-50
-      "
-      >
-        <Link to="/result" aria-label="Back">
+       <div className="pt-4 md:pt-12 pb-2 fixed bottom-10 left-0 right-0 ">
+      <div className="flex justify-between max-w-full mx-auto px-13 md:px-9">
+        
+        {/* Back Button */}
+        <Link to="/result">
           <div>
-            <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
-              <span className="rotate-[-45deg] text-xs font-semibold">
-                BACK
-              </span>
+            {/* Small screens */}
+            <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-100 sm:hidden">
+              <span className="rotate-[-45deg] text-xs font-semibold">BACK</span>
             </div>
-
-            <div className="group hidden sm:flex flex-row items-center relative">
-              <div className="relative w-12 h-12 border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300">
-                <div className="absolute inset-0 flex items-center justify-center rotate-[-45deg]">
-                  <span className="rotate-180 scale-[0.9]">▶</span>
-                </div>
-              </div>
-              <span className="text-sm font-semibold ml-6">BACK</span>
+            {/* Medium and up screens */}
+            <div className="group hidden sm:flex flex-row relative justify-center items-center">
+              <div className="w-12 h-12 hidden sm:flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300"></div>
+              <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 hidden sm:block group-hover:scale-[0.92] ease duration-300">
+                ▶
+              </span>
+              <span className="text-sm font-semibold hidden sm:block ml-6">BACK</span>
             </div>
           </div>
         </Link>
 
-        <Link
-          to={{
-            pathname: "/summary",
-          }}
-          state={{ imageBase64: base64String, apiResult: apiResult }}
-          className=""
-          aria-label="Proceed"
-        >
+        {/* Get Summary Button */}
+        <Link to="/summary">
           <div>
-            <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
+            {/* Small screens */}
+            <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-100 sm:hidden">
               <span className="rotate-[-45deg] text-xs font-semibold">SUM</span>
             </div>
-
-            <div className="group hidden sm:flex flex-row items-center relative">
-              <span className="text-sm font-semibold mr-5">GET SUMMARY</span>
-              <div className="relative w-12 h-12 border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300">
-                <div className="absolute inset-0 flex items-center justify-center rotate-[-45deg]">
-                  <span className="scale-[0.9]">▶</span>
-                </div>
-              </div>
+            {/* Medium and up screens */}
+            <div className="group hidden sm:flex flex-row relative justify-center items-center">
+              <span className="text-sm font-semibold hidden sm:block mr-5">GET SUMMARY</span>
+              <div className="w-12 h-12 hidden sm:flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300"></div>
+              <span className="absolute right-[15px] bottom-[13px] scale-[0.9] hidden sm:block group-hover:scale-[0.92] ease duration-300">
+                ▶
+              </span>
             </div>
           </div>
         </Link>
+
       </div>
+    </div>
     </div>
   );
 };

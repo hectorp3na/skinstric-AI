@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Summary = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const hasFetchedRef = useRef(false);
 
   const rawBase64 =
     location.state?.imageBase64 || localStorage.getItem("imageBase64");
@@ -166,11 +167,13 @@ const Summary = () => {
   }, [location.state]);
 
   useEffect(() => {
+     if (hasFetchedRef.current) return;
     if (!base64String || !apiResult) {
       navigate("/select");
       return;
     }
     fetchDemographics(apiResult);
+    hasFetchedRef.current = true;
   }, [base64String, apiResult, navigate, fetchDemographics]);
 
   const handleOptionClick = (label) => {
@@ -204,8 +207,11 @@ const Summary = () => {
   };
 
   return (
+    <>
+   <div className="h-screen md:h-[90vh] flex flex-col md:mt-5">
+    <div className="flex-1 w-full bg-white md:overflow-hidden overflow-auto">
     <div className="__className_5f0add antialiased text-[#1A1B1C] h-screen flex flex-col">
-      <div className="scroll-on-mobile max-w-full flex mx-5 flex-col items-center bg-white text-center px-4 md:px-0">
+      <div className="scroll-on-mobile max-w-full flex mx-5 flex-col items-center bg-white text-center px-4 md:px-0" style={{ paddingRight: "16px", paddingLeft: "16px" }}>
         <div className="relative w-full max-w-[1440px] mx-auto min-h-screen pb-[100px]">
 
           <div className="text-start ml-4 mb-4 md:mb-10 md:ml-0 md:mt-20">
@@ -353,7 +359,7 @@ const Summary = () => {
         </div>
 
 
-        <div className="absolute bottom-8 md:bottom-8 w-full flex justify-between md:px-9 px-6 z-50">
+        <div className="absolute bottom-10 md:bottom-8 w-full flex justify-between md:px-9 px-6 z-50">
 
           <button
             className="cursor-pointer px-6"
@@ -425,7 +431,7 @@ const Summary = () => {
             <button
               aria-label="Proceed"
               onClick={() => navigate("/")}
-              className="w-100 cursor-pointer px-6"
+              className="cursor-pointer px-6"
             >
               <div className="w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45">
                 <span className="rotate-[-45deg] text-xs font-semibold">
@@ -437,7 +443,9 @@ const Summary = () => {
         </div>
       </div>
     </div>
+    </div>
+    </div>
+      </>
   );
 };
-
 export default Summary;
