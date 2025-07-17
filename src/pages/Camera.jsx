@@ -111,7 +111,7 @@ const Camera = () => {
           </g>
         </svg>
         <div
-          className="absolute text-center uppercase font-[Roobert_TRIAL] font-semibold text-[16px] leading-[24px] tracking-[-0.02em] opacity-100 whitespace-nowrap"
+          className="absolute text-center uppercase font-semibold text-[16px] leading-[24px] tracking-[-0.02em] opacity-100 whitespace-nowrap"
           style={{
             top: "150px",
             transform: "rotate(0deg)",

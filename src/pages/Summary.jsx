@@ -214,7 +214,7 @@ const Summary = () => {
       <div className="scroll-on-mobile max-w-full flex mx-5 flex-col items-center bg-white text-center px-4 md:px-0" style={{ paddingRight: "16px", paddingLeft: "16px" }}>
         <div className="relative w-full max-w-[1440px] mx-auto min-h-screen pb-[100px]">
 
-          <div className="text-start ml-4 mb-4 md:mb-10 md:ml-0 md:mt-20">
+          <div className="text-start ml-4 mb-4 md:mb-10 md:ml-0 md:mt-20" style={{marginTop: "0px"}}>
             <h2 className="text-base font-semibold mb-1 leading-[24px]">
               A.I. ANALYSIS
             </h2>
