@@ -67,7 +67,7 @@ const TestingText = ({
   };
   return (
     <div className="relative min-h-screen px-4">
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 -translate-y-35">
       <p className="text-sm text-gray-400 tracking-wider uppercase mb-1 whitespace-nowrap">
         {step === 1
           ? "CLICK TO TYPE"

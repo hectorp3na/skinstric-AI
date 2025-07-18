@@ -9,7 +9,7 @@ const RotatingSquares = () => {
         height="764"
         viewBox="0 0 764 764"
         fill="none"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 animate-spin-slow"
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 animate-spin-slow"
       >
         <path
           opacity="0.3"
@@ -27,7 +27,7 @@ const RotatingSquares = () => {
         height="684"
         viewBox="0 0 684 684"
         fill="none"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 animate-spin-slower"
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 animate-spin-slower"
       >
         <path
           opacity="0.6"
@@ -45,7 +45,7 @@ const RotatingSquares = () => {
         height="604"
         viewBox="0 0 604 604"
         fill="none"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 animate-spin-slowest"
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 animate-spin-slowest"
       >
         <path
           d="M302 1L603 302L302 603L1 302L302 1Z"
